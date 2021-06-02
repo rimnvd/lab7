@@ -2,7 +2,6 @@ package utility;
 
 import data.*;
 import utility.exception.WrongInputFormatException;
-
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -22,10 +21,10 @@ public class ElementCreation {
      */
     public Dragon createElement() {
         String name = null;
-        long age;
-        DragonType type;
-        Color color;
-        DragonCharacter character;
+        long age = 0;
+        DragonType type = null;
+        Color color = null;
+        DragonCharacter character = null;
         Integer x;
         Integer y;
         Integer size;
@@ -33,13 +32,14 @@ public class ElementCreation {
         Dragon dragon;
         try {
             name = checkName();
+            age = checkAge();
+            type = checkType();
+            color = checkColor();
+            character = checkCharacter();
         } catch (WrongInputFormatException e) {
             System.out.println("\u001B[31m" + "\nНеверный формат данных. Повторите ввод" + "\u001B[0m");
         }
-        age = checkAge();
-        type = checkType();
-        color = checkColor();
-        character = checkCharacter();
+
         x = checkX();
         y = checkY();
         if (checkDragonHead()) {
@@ -138,6 +138,7 @@ public class ElementCreation {
 
     public Double checkEyesCount() throws NumberFormatException {
         FieldChecker<Double> fieldChecker = str -> {
+            if (str == null) throw new WrongInputFormatException();
             Double result = Double.parseDouble(str);
             if (result <= 0) {
                 throw new NumberFormatException();
@@ -151,8 +152,14 @@ public class ElementCreation {
         return readAndCheckField("количество глаз", fieldChecker);
     }
 
-    public Color checkColor() throws IllegalArgumentException {
-        FieldChecker<Color> fieldChecker = str -> Color.valueOf(str.toUpperCase());
+    public Color checkColor() throws WrongInputFormatException {
+        FieldChecker<Color> fieldChecker = str -> {
+            if (str == null) throw new WrongInputFormatException();
+            if (str.toUpperCase().matches("RED|YELLOW|ORANGE|BROWN|WHITE")) {
+                return Color.valueOf(str.toUpperCase());
+            }
+            throw new WrongInputFormatException();
+        };
         StringBuilder ColorConstants = new StringBuilder();
         for (Color color : Color.values()) {
             ColorConstants.append(color.toString()).append("\n");
@@ -161,8 +168,14 @@ public class ElementCreation {
         return readAndCheckField("цвет\n" + ColorConstants, fieldChecker);
     }
 
-    public DragonType checkType() throws IllegalArgumentException {
-        FieldChecker<DragonType> fieldChecker = str -> DragonType.valueOf(str.toUpperCase());
+    public DragonType checkType() throws WrongInputFormatException {
+        FieldChecker<DragonType> fieldChecker = str -> {
+            if (str == null) throw new WrongInputFormatException();
+            if (str.toUpperCase().matches("WATER|AIR|FIRE|UNDERGROUND")) {
+                return DragonType.valueOf(str.toUpperCase());
+            }
+            throw new WrongInputFormatException();
+        };
         StringBuilder TypeConstants = new StringBuilder();
         for (DragonType type : DragonType.values()) {
             TypeConstants.append(type.toString()).append("\n");
@@ -171,8 +184,14 @@ public class ElementCreation {
         return readAndCheckField("тип\n" + TypeConstants, fieldChecker);
     }
 
-    public DragonCharacter checkCharacter() throws IllegalArgumentException {
-        FieldChecker<DragonCharacter> fieldChecker = str -> DragonCharacter.valueOf(str.toUpperCase());
+    public DragonCharacter checkCharacter() throws WrongInputFormatException {
+        FieldChecker<DragonCharacter> fieldChecker = str -> {
+            if (str == null) throw new WrongInputFormatException();
+            if (str.toUpperCase().matches("GOOD|CUNNING|CHAOTIC_EVIL")) {
+                return DragonCharacter.valueOf(str.toUpperCase());
+            }
+            throw  new WrongInputFormatException();
+        };
         StringBuilder CharacterConstants = new StringBuilder();
         for (DragonCharacter character : DragonCharacter.values()) {
             CharacterConstants.append(character.toString()).append("\n");
@@ -211,26 +230,41 @@ public class ElementCreation {
 
     public Dragon createFromScript(String[] fields) {
         try {
+            DragonType type = null;
+            Color color = null;
+            DragonCharacter character = null;
             String name = fields[0];
             long age = Long.parseLong(fields[1]);
-            DragonType type = DragonType.valueOf(fields[2].toUpperCase());
-            Color color = Color.valueOf(fields[3].toUpperCase());
-            DragonCharacter character = DragonCharacter.valueOf(fields[4].toUpperCase());
+            if (fields[2] != null) {
+                if (fields[2].toUpperCase().matches("WATER|AIR|FIRE|UNDERGROUND")) {
+                    type = DragonType.valueOf(fields[2].toUpperCase());
+                }
+            }
+            if (fields[3] != null) {
+                if (fields[3].toUpperCase().matches("RED|YELLOW|ORANGE|BROWN|WHITE")) {
+                    color = Color.valueOf(fields[3].toUpperCase());
+                }
+            }
+            if (fields[4] != null) {
+                if (fields[4].toUpperCase().matches("GOOD|CUNNING|CHAOTIC_EVIL")) {
+                    character = DragonCharacter.valueOf(fields[4].toUpperCase());
+                }
+            }
             Integer x = Integer.parseInt(fields[5]);
             Integer y = Integer.parseInt(fields[6]);
             if (fields[7].equals("") && fields[8].equals("")) {
-                if (age > 0) {
+                if (age > 0 && name != null && color != null && type != null && character != null) {
                     return new Dragon(name, age, type, color, character, new Coordinates(x, y));
                 }
             } else {
                 Integer size = Integer.parseInt(fields[7]);
                 Double eyesCount = Double.parseDouble(fields[8]);
                 long eyesCountRound = Math.round(eyesCount);
-                if (eyesCount == eyesCountRound && age > 0 && size > 0 && eyesCount > 0) {
+                if (eyesCount == eyesCountRound && age > 0 && size > 0 && eyesCount > 0 && name != null && type != null && character != null) {
                     return new Dragon(name, age, type, color, character, new DragonHead(size, eyesCount), new Coordinates(x, y));
                 }
             }
-        } catch (IllegalArgumentException ex) {
+        } catch (NumberFormatException ex) {
             return null;
         }
         return null;

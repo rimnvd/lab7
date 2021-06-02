@@ -187,13 +187,13 @@ public class Dragon implements Comparable<Dragon>, Serializable {
         S += "\tТип: " + type + "\n";
         S += "\tЦвет: " + color + "\n";
         S += "\tХарактер: " + character + "\n";
+        S += "\tКоординаты:\n";
+        S += "\t\tx = " + coordinates.getX() + "\n";
+        S += "\t\ty = " + coordinates.getY() + "\n";
         if (head != null) {
             S += "\tРазмер головы: " + head.getSize() + "\n";
             S += "\tКоличество глаз " + head.getEyesCount() + "\n";
         }
-        S += "\tКоординаты:\n";
-        S += "\t\tx = " + coordinates.getX() + "\n";
-        S += "\t\ty = " + coordinates.getY();
         return S;
     }
 

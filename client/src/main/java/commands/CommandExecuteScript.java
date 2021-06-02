@@ -81,7 +81,7 @@ public class CommandExecuteScript extends Command {
                                         if (dragon != null) {
                                             programProcess.run(new Request(dragon, programProcess.getCommands().get("update"), fullCommandName));
                                         } else {
-                                            System.out.println("\u001B[31m" + "Элемент не может быть добавлен в коллекцию" + "\u001B[0m");
+                                            System.out.println("\u001B[31m" + "Невозможно выполнить данную команду" + "\u001B[0m");
                                             System.out.println();
                                         }
                                     }

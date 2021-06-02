@@ -269,11 +269,10 @@ public class FileManager {
      * @return the set value of the color or null if it was not set
      */
     public Color checkColor(String checkedValue) {
-        try {
-            color = Color.valueOf(checkedValue);
-        } catch (IllegalArgumentException ex) {
-            color = null;
-        }
+        if (checkedValue == null) color = null;
+        else if (checkedValue.toUpperCase().matches("RED|YELLOW|ORANGE|BROWN|WHITE")) {
+            color = Color.valueOf(checkedValue.toUpperCase());
+        } else color = null;
         return color;
     }
 
@@ -284,11 +283,10 @@ public class FileManager {
      * @return the set value of the type or null if it was not set
      */
     public DragonType checkType(String checkedValue) {
-        try {
-            type = DragonType.valueOf(checkedValue);
-        } catch (IllegalArgumentException ex) {
-            type = null;
-        }
+        if (checkedValue == null) type = null;
+        else if (checkedValue.toUpperCase().matches("WATER|AIR|FIRE|UNDERGROUND")) {
+            type = DragonType.valueOf(checkedValue.toUpperCase());
+        } else type = null;
         return type;
     }
 
@@ -299,11 +297,10 @@ public class FileManager {
      * @return the set value of the character or null if it was not set
      */
     public DragonCharacter checkCharacter(String checkedValue) {
-        try {
-            character = DragonCharacter.valueOf(checkedValue);
-        } catch (IllegalArgumentException ex) {
-            character = null;
-        }
+        if (checkedValue == null) character = null;
+        else if (checkedValue.toUpperCase().matches("GOOD|CUNNING|CHAOTIC_EVIL")) {
+            character = DragonCharacter.valueOf(checkedValue.toUpperCase());
+        } else character = null;
         return character;
     }
 

@@ -88,6 +88,7 @@ public class CollectionManager {
         return false;
     }
 
+
     /**
      * Removes the element from this collection with the specified id value.
      * If the collection does not contain the specified element, it is unchanged.
