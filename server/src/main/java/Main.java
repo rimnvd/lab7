@@ -2,7 +2,6 @@ import utility.*;
 import utility.connection.Server;
 
 import java.io.IOException;
-import java.rmi.AlreadyBoundException;
 
 public class Main {
     public static void main(String[] args) {
