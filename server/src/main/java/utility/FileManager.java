@@ -487,12 +487,12 @@ public class FileManager {
             Transformer tr = TransformerFactory.newInstance().newTransformer();
             tr.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource dom = new DOMSource(document);
-            if (!file.canWrite() && file.exists()) {
-                logger.warn("It is impossible to write to this file");
-            } else if (!file.exists()) {
+            if (!file.canWrite() || !file.exists()) {
                 BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream("lab6reserve.xml"));
                 StreamResult result = new StreamResult(outputStream);
                 tr.transform(dom, result);
+                logger.warn("It is impossible to write the collection to file " + file.getName());
+                logger.info("The collection was written to file lab6reserve.xml");
             } else {
                 BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file));
                 StreamResult result = new StreamResult(outputStream);
