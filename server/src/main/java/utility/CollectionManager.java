@@ -27,9 +27,7 @@ public class CollectionManager {
     public void loadCollection() {
         vector = fileManager.readCollection();
         date = LocalDate.now();
-        if (fileManager.getMaxId() != null) {
-            maxId = fileManager.getMaxId();
-        } else maxId = 0L;
+        maxId = (fileManager.getMaxId() != null) ? fileManager.getMaxId() : 0L;
     }
 
     /**
@@ -79,13 +77,15 @@ public class CollectionManager {
     /**
      * Appends the specified element to the end of this collection.
      */
-    public void addToCollection(Dragon dragon) {
+    public boolean addToCollection(Dragon dragon) {
         if (maxId != Long.MAX_VALUE) {
             maxId++;
             dragon.setId(maxId);
             dragon.setCreationDate(LocalDate.now());
             vector.add(dragon);
-        } else System.out.println("Невозможно добавить элемент в коллекцию");
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -95,18 +95,7 @@ public class CollectionManager {
      * @param id id value
      */
     public boolean removeById(Long id) {
-        boolean checkRemoving = false;
-        for (Dragon dragon : vector) {
-            if (dragon.getId().equals(id)) {
-                vector.remove(dragon);
-                checkRemoving = true;
-                System.out.println("Элемент успешно удален из коллекции");
-            }
-        }
-        if (!checkRemoving) {
-            System.out.println("В коллекции нет элемента с таким значением id");
-        }
-        return checkRemoving;
+        return vector.removeIf(dragon -> dragon.getId().equals(id));
     }
 
     /**
@@ -115,14 +104,8 @@ public class CollectionManager {
      * @param character character value
      * @return the number of the components in this collection with specified character value
      */
-    public int countCharacter(String character) {
-        int count = 0;
-        for (Dragon dragon : vector) {
-            if (dragon.getCharacter().equals(DragonCharacter.valueOf(character.toUpperCase()))) {
-                count++;
-            }
-        }
-        return count;
+    public long countCharacter(String character) {
+        return vector.stream().filter(dragon -> dragon.getCharacter().equals(DragonCharacter.valueOf(character.toUpperCase()))).count();
     }
 
     /**
@@ -131,11 +114,7 @@ public class CollectionManager {
      * @param d the element to be compared.
      */
     public void removeLower(Dragon d) {
-        int i = 0;
-        while (vector.get(0).compareTo(d) < 0 && i < vector.size()) {
-            vector.removeElementAt(0);
-            i++;
-        }
+        vector.removeIf(dragon -> dragon.compareTo(d) < 0);
     }
 
     /**
@@ -153,13 +132,7 @@ public class CollectionManager {
      * @return the maximum component of this collection
      */
     public Dragon maxElement() {
-        Dragon maxElement = vector.get(0);
-        for (Dragon dragon : vector) {
-            if (dragon.compareTo(maxElement) > 0) {
-                maxElement = dragon;
-            }
-        }
-        return maxElement;
+        return Collections.max(vector);
     }
 
     /**
@@ -200,11 +173,11 @@ public class CollectionManager {
      * @param color color value
      */
     public boolean removeByColor(Color color) {
-        boolean flag = true;
-        for (int i = 0; i < vector.size() && flag; i++) {
+        boolean flag = false;
+        for (int i = 0; i < vector.size() && !flag; i++) {
             if (vector.get(i).getColor().equals(color)) {
                 vector.removeElementAt(i);
-                flag = false;
+                flag = true;
             }
         }
         return flag;

@@ -22,11 +22,11 @@ public class CommandInfo extends Command {
      * Executes the command.
      *
      * @param enteredCommand the full name of the entered command
-     * @return
+     * @return true if data is correct; false otherwise
      */
     @Override
     public Response execute(String enteredCommand, Dragon dragon) {
-        return new Response("Тип коллекции: " + collectionManager.collectionType() + "Дата инициализации коллекции: " + collectionManager.getDate() + "Количество элементов коллекции: " + collectionManager.collectionSize());
+        return new Response("Тип коллекции: " + collectionManager.collectionType() + "\nДата инициализации коллекции: " + collectionManager.getDate() + "\nКоличество элементов коллекции: " + collectionManager.collectionSize());
     }
 }
 

@@ -41,10 +41,10 @@ public class CommandUpdate extends Command {
             long id = Long.parseLong(enteredCommand);
             if (id > 0) checkValue = true;
             else {
-                System.out.println("Команда не найдена. Введите \"help\" для справки");
+                System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
             }
         } catch (NumberFormatException ex) {
-            System.out.println("Команда не найдена. Введите \"help\" для справки");
+            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
         }
         return checkValue;
     }

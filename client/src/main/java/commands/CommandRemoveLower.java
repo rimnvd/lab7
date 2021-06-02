@@ -9,28 +9,29 @@ import utility.ElementCreation;
  */
 public class CommandRemoveLower extends Command {
     private static final long serialVersionUID = 11L;
-    private final ElementCreation elementCreation;
 
-    public CommandRemoveLower(ElementCreation elementCreation) {
+    public CommandRemoveLower() {
         super("remove_lower");
-        this.elementCreation = elementCreation;
     }
 
     /**
      * Executes the command.
      *
-     * @param EnteredCommand The full name of the command.
-     * @return
+     * @param enteredCommand The full name of the command.
+     * @return true if data is correct; false otherwise
      */
     @Override
-    public boolean execute(String EnteredCommand) {
-        if (!checkCommand(EnteredCommand)) {
-            System.out.println("Команда не найдена. Введите \"help\" для справки");
+    public boolean execute(String enteredCommand) {
+        if (!checkCommand(enteredCommand)) {
+            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
             return false;
-        } else {
-            Dragon dragon = elementCreation.createElement();
-            return true;
         }
+        return true;
+    }
+
+    @Override
+    public Dragon execute(String[] fields, ElementCreation elementCreation) {
+        return elementCreation.createFromScript(fields);
     }
 }
 

@@ -27,13 +27,13 @@ public class CommandGroupCountingByCharacter extends Command {
      */
     @Override
     public Response execute(String enteredCommand, Dragon dragon) {
-        int good;
-        int cunning;
-        int chaotic_evil;
+        long good;
+        long cunning;
+        long chaotic_evil;
         good = collectionManager.countCharacter("GOOD");
         cunning = collectionManager.countCharacter("CUNNING");
         chaotic_evil = collectionManager.countCharacter("CHAOTIC_EVIL");
-        return new Response("CUNNING: " + cunning + "\n" + "GOOD: " + good + "\n" + "CHAOTIC_EVIL: " + chaotic_evil + "\n");
+        return new Response("CUNNING: " + cunning + "\n" + "GOOD: " + good + "\n" + "CHAOTIC_EVIL: " + chaotic_evil);
     }
 
 

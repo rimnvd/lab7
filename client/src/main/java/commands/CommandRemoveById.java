@@ -17,7 +17,7 @@ public class CommandRemoveById extends Command {
     @Override
     public boolean execute(String enteredCommand) {
         if (!checkCommand(enteredCommand)) {
-            System.out.println("Команда не найдена. Введите \"help\" для справки");
+            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
             return false;
         }
         return checkId(argument(enteredCommand));
@@ -35,7 +35,7 @@ public class CommandRemoveById extends Command {
             Long.parseLong(enteredCommand);
             checkValue = true;
         } catch (NumberFormatException ex) {
-            System.out.println("Команда не найдена. Введите \"help\" для справки");
+            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
             checkValue = false;
         }
         return checkValue;

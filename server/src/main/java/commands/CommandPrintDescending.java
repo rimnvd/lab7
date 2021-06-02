@@ -28,7 +28,7 @@ public class CommandPrintDescending extends Command {
     @Override
     public Response execute(String enteredCommand, Dragon dragon) {
         if (collectionManager.isEmpty()) {
-            return new Response("Коллекция пуста\n");
+            return new Response("Коллекция пуста");
         } else {
             Vector<Dragon> vector = new Vector<>(collectionManager.getCollection());
             collectionManager.reverseSort(vector);
@@ -36,6 +36,7 @@ public class CommandPrintDescending extends Command {
             for (Dragon dragons : vector) {
                 message.append("Dragon ").append(dragons.getName()).append("\n");
             }
+            message.deleteCharAt(message.length() - 1);
             return new Response(message.toString());
         }
     }

@@ -1,36 +1,34 @@
-import utility.CollectionManager;
-import utility.FileManager;
-import utility.RequestProcess;
-import utility.Server;
+import utility.*;
+import utility.connection.Server;
 
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.io.IOException;
+import java.rmi.AlreadyBoundException;
 
 public class Main {
     public static void main(String[] args) {
+        final int port;
         final String env = "FILE";
-        int port;
-        Server server;
         FileManager fileManager = new FileManager(env);
         CollectionManager collectionManager = new CollectionManager(fileManager);
-        RequestProcess requestProcess = new RequestProcess(collectionManager);
         collectionManager.loadCollection();
-        System.out.println("Введите порт");
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
+        System.out.println();
+        if (System.getenv().get("PORT") == null) {
+            System.out.println("\u001B[31m" + "Environment variable PORT was not found");
+        } else {
             try {
-                port = Integer.parseInt(scanner.nextLine().trim());
-                server = new Server(port, requestProcess);
-                break;
-            } catch (NumberFormatException ex) {
-                System.out.println("Неверный формат данных. Повторите ввод");
-            } catch (NoSuchElementException ex) {
-                collectionManager.saveToFile();
-                System.exit(0);
+                port = Integer.parseInt(System.getenv("PORT"));
+                if (port < 0 || port > 0xFFFF) {
+                    System.out.println("\u001B[31m" + "Wrong data format of PORT variable");
+                    return;
+                }
+                Server server = new Server(port, collectionManager);
+                server.run();
+            } catch (NumberFormatException  ex) {
+                System.out.println("\u001B[31m" + "Wrong data format of PORT variable");
+            } catch (IOException ex) {
+                System.out.println("\u001B[31m" + "IOException has happened. " + ex.getMessage());
             }
         }
-        server.processRequest();
-
     }
 
 }

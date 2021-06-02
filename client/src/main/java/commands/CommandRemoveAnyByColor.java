@@ -19,12 +19,12 @@ public class CommandRemoveAnyByColor extends Command {
      * Executes the command.
      *
      * @param enteredCommand the full name of the entered command
-     * @return
+     * @return true if data is correct; false otherwise
      */
     @Override
     public boolean execute(String enteredCommand) {
         if (!checkCommand(enteredCommand)) {
-            System.out.println("Команда не найдена. Введите \"help\" для справки");
+            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
             return false;
         }
         return checkColor(argument(enteredCommand).toUpperCase());
@@ -48,7 +48,7 @@ public class CommandRemoveAnyByColor extends Command {
         try {
             Color.valueOf(enteredCommand);
         } catch (IllegalArgumentException ex) {
-            System.out.println("Команда не найдена. Введите \"help\" для справки");
+            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
             checkValue = false;
         }
         return checkValue;

@@ -19,16 +19,16 @@ public class CommandAddIfMax extends Command {
     /**
      * Executes the command.
      *
-     * @param EnteredCommand the full name of the entered command
-     * @return
+     * @param enteredCommand the full name of the entered command
+     * @return true if data is correct; false otherwise
      */
     @Override
-    public boolean execute(String EnteredCommand) {
-        if (!checkCommand(EnteredCommand)) {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[31m");
-            return true;
+    public boolean execute(String enteredCommand) {
+        if (!checkCommand(enteredCommand)) {
+            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override

@@ -23,12 +23,6 @@ public class Request implements Serializable {
         this.fullCommand = fullCommand;
     }
 
-    public Request(Command commandName) {
-        this.commandName = commandName;
-        this.dragon = null;
-        this.fullCommand = "";
-    }
-
     public Command getCommandName() {
         return commandName;
     }

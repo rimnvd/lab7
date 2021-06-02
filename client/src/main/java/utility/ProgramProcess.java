@@ -17,7 +17,7 @@ public class ProgramProcess {
     private final ElementCreation elementCreation;
     private final ArrayList<String> path = new ArrayList<>();
     private final Scanner scanner;
-    private Client client;
+    private final Client client;
 
     public ProgramProcess(ElementCreation elementCreation, Scanner scanner, Client client) {
         this.elementCreation = elementCreation;
@@ -35,8 +35,7 @@ public class ProgramProcess {
         commands.put("remove_any_by_color", new CommandRemoveAnyByColor());
         commands.put("remove_by_id", new CommandRemoveById());
         commands.put("remove_last", new CommandRemoveLast());
-        commands.put("remove_lower", new CommandRemoveLower(elementCreation));
-        commands.put("save", new CommandSave());
+        commands.put("remove_lower", new CommandRemoveLower());
         commands.put("show", new CommandShow());
         commands.put("update", new CommandUpdate());
     }
@@ -58,7 +57,7 @@ public class ProgramProcess {
                     } else {
                         if (commands.get(new Command().commandName(line)).execute(line)) {
                             Dragon dragon;
-                            if (new Command().commandName(line).equals("add") || new Command().commandName(line).equals("add_if_max") || new Command().commandName(line).equals("update")) {
+                            if (new Command().commandName(line).equals("add") || new Command().commandName(line).equals("add_if_max") || new Command().commandName(line).equals("update") || new Command().commandName(line).equals("remove_lower")) {
                                 dragon = elementCreation.createElement();
                                 request = new Request(dragon, commands.get(new Command().commandName(line)), line);
                             } else request = new Request(commands.get(new Command().commandName(line)), line);
@@ -66,7 +65,7 @@ public class ProgramProcess {
                         }
                     }
                 } else {
-                    System.out.println("Команда не найдена. Введите \"help\" для справки");
+                    System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
                 }
                 System.out.println();
                 System.out.println("Введите команду");
@@ -80,15 +79,14 @@ public class ProgramProcess {
 
     public void run(Request request) {
         client.connect();
-        client.send(request);
         try {
+            client.send(request);
             Response response = client.receive();
-            System.out.println(response.getResponse());
+            if (!response.getResponse().equals("")) System.out.println(response.getResponse());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
-
     public HashMap<String, Command> getCommands() {
         return commands;
     }

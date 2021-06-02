@@ -21,8 +21,8 @@ public class CommandAdd extends Command {
 
     @Override
     public Response execute(String enteredCommand, Dragon dragon) {
-        collectionManager.addToCollection(dragon);
-        return new Response("Элемент успешно добавлен в коллекцию\n");
+        if (collectionManager.addToCollection(dragon)) return new Response("\u001B[32m" + "Элемент успешно добавлен в коллекцию" + "\u001B[0m");
+        return new Response("\u001B[31m" + "Элемент не может быть добавлен в коллекцию" + "\u001B[0m");
     }
 
 }

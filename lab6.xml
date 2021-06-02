@@ -2,7 +2,7 @@
 <Dragons>
     <Dragon>
         <id>212</id>
-        <CreationDate>2021-04-23</CreationDate>
+        <CreationDate>2021-06-01</CreationDate>
         <name>Stepa</name>
         <age>123</age>
         <DragonType>WATER</DragonType>
@@ -18,21 +18,8 @@
         </Coordinates>
     </Dragon>
     <Dragon>
-        <id>2</id>
-        <CreationDate>2021-04-23</CreationDate>
-        <name>a</name>
-        <age>1</age>
-        <DragonType>WATER</DragonType>
-        <Color>RED</Color>
-        <DragonCharacter>GOOD</DragonCharacter>
-        <Coordinates>
-            <x>1</x>
-            <y>1</y>
-        </Coordinates>
-    </Dragon>
-    <Dragon>
         <id>214</id>
-        <CreationDate>2021-04-23</CreationDate>
+        <CreationDate>2021-06-01</CreationDate>
         <name>asds</name>
         <age>1</age>
         <DragonType>WATER</DragonType>
@@ -45,7 +32,7 @@
     </Dragon>
     <Dragon>
         <id>215</id>
-        <CreationDate>2021-04-23</CreationDate>
+        <CreationDate>2021-06-01</CreationDate>
         <name>aaa</name>
         <age>1</age>
         <DragonType>WATER</DragonType>

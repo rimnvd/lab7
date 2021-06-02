@@ -47,6 +47,7 @@ public class CommandHelp extends Command {
         for (Map.Entry<String, String> i : pairs) {
             message.append(i.getKey()).append(": ").append(i.getValue()).append("\n");
         }
+        message.deleteCharAt(message.length() - 1);
         return new Response(message.toString());
     }
 

@@ -15,7 +15,7 @@ public class CommandClear extends Command {
      * Executes the command.
      *
      * @param enteredCommand the full name of the entered command
-     * @return
+     * @return true if data is correct; false otherwise
      */
 
     @Override
@@ -23,7 +23,7 @@ public class CommandClear extends Command {
         if (checkCommand(enteredCommand)) {
             return true;
         } else {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[31m");
+            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
         }
         return false;
     }

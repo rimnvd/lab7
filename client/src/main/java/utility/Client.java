@@ -1,44 +1,35 @@
 package utility;
 
-import utility.Request;
-import utility.Response;
-
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.UnresolvedAddressException;
-import java.util.Set;
+
 
 public class Client {
-    private final String ip;
-    private final int port;
-    private Selector selector;
+    private SocketChannel channel;
+    private final SocketAddress address;
 
 
-    public Client(String ip, int port) {
-        this.ip = ip;
-        this.port = port;
+
+    public Client(String ip, int port) throws UnresolvedAddressException{
+        this.address = new InetSocketAddress(ip, port);
     }
 
     public void connect() {
-        SocketAddress address = new InetSocketAddress(ip, port);
         long start = System.currentTimeMillis();
         boolean flag = false;
         while (true) {
             try {
-                SocketChannel channel = SocketChannel.open(address);
+                channel = SocketChannel.open(address);
                 channel.configureBlocking(false);
-                selector = Selector.open();
-                channel.register(selector, SelectionKey.OP_WRITE);
                 break;
             } catch (IOException | UnresolvedAddressException ex) {
                 long end = System.currentTimeMillis();
-                if (end - start > 10000 && !flag) {
-                    System.out.println("Ошибка подкдючения к северу");
+                if (end - start > 5000 && !flag) {
+                    System.out.println("\u001B[31m" + "Ошибка подкдючения к северу\n" + "\u001B[0m");
                     flag = true;
                 }
             }
@@ -46,60 +37,32 @@ public class Client {
 
     }
 
-    public void send(Request request) {
-        try {
-            ByteBuffer buffer = ByteBuffer.wrap(serialize(request));
-            SocketChannel channel = null;
-            while (channel == null) {
-                selector.select();
-                Set<SelectionKey> keys = selector.selectedKeys();
-                for (SelectionKey key : keys) {
-                    if (key.isWritable()) {
-                        channel = (SocketChannel) key.channel();
-                        do {
-                            channel.write(buffer);
-                        } while (buffer.hasRemaining());
-                        channel.register(selector, SelectionKey.OP_READ);
-                        break;
-                    }
-                }
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+    public void send(Request request) throws IOException {
+        if (channel == null) {
+            connect();
+        }
+        ByteBuffer buffer = ByteBuffer.wrap(serialize(request));
+        while (buffer.hasRemaining()) {
+            channel.write(buffer);
         }
     }
 
     public Response receive() throws IOException, ClassNotFoundException {
-        SocketChannel channel = null;
-        Response response = null;
-        ByteBuffer buffer = ByteBuffer.allocate(16384);
-        while (channel == null) {
-            selector.select();
-            Set<SelectionKey> keys = selector.selectedKeys();
-            for (SelectionKey key : keys) {
-                if (key.isReadable()) {
-                    channel =(SocketChannel) key.channel();
-                    channel.read(buffer);
-                    buffer.flip();
-                    if (buffer.hasRemaining()) {
-                        response = deserialize(buffer.array());
-                    }
-                    channel.register(selector, SelectionKey.OP_WRITE);
-                    buffer.clear();
-                    break;
-                }
-            }
-        }
-        return response;
-    }
-
-    public Response deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
         Response response;
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        ByteBuffer buffer = ByteBuffer.allocate(16384);
+        while (buffer.position() < 8) {
+            channel.read(buffer);
+        }
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array());
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        int numberOfBytes = objectInputStream.readInt();
+        while (buffer.position() != numberOfBytes) {
+            channel.read(buffer);
+        }
+        byteArrayInputStream = new ByteArrayInputStream(buffer.array());
+        objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        objectInputStream.readInt();
         response = (Response) objectInputStream.readObject();
-        byteArrayInputStream.close();
-        objectInputStream.close();
         return response;
     }
 
@@ -107,13 +70,7 @@ public class Client {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
         objectOutputStream.writeObject(request);
-        byte[] buffer = byteArrayOutputStream.toByteArray();
-        objectOutputStream.flush();
-        byteArrayOutputStream.flush();
-        byteArrayOutputStream.close();
-        objectOutputStream.close();
-        return buffer;
+        return byteArrayOutputStream.toByteArray();
     }
-
 
 }

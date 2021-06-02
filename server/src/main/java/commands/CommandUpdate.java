@@ -24,12 +24,12 @@ public class CommandUpdate extends Command {
      */
     public Response execute(String enteredCommand, Dragon dragon) {
         if (collectionManager.isEmpty()) {
-            return new Response("Невозможно выполнить данную команду, так как коллекция пуста\n");
+            return new Response("\u001B[31m" + "Невозможно выполнить данную команду, так как коллекция пуста" + "\u001B[0m");
         } else {
             if (collectionManager.updateById(Long.parseLong(argument(enteredCommand)), dragon)) {
-                return new Response("Невозможно выполнить данную команду, так как в коллекции нет элемента с такими значением id\n");
+                return new Response("\u001B[31m" + "Невозможно выполнить данную команду, так как в коллекции нет элемента с такими значением id" + "\u001B[0m");
             } else {
-                return new Response("Элемент с id " + argument(enteredCommand) + " успешно обновлен\n");
+                return new Response("\u001B[32m" + "Элемент с id " + argument(enteredCommand) + " успешно обновлен" + "\u001B[0m");
             }
         }
     }

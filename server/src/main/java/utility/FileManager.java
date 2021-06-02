@@ -1,6 +1,8 @@
 package utility;
 
 import data.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -42,12 +44,13 @@ public class FileManager {
     private boolean checkHeadSize;
     private boolean checkEyesNumber;
     private Long maxId = null;
+    private final Logger logger = LoggerFactory.getLogger(FileManager.class);
 
     public FileManager(String envVariable) {
         if (System.getenv().get(envVariable) != null) {
             this.file = new File(System.getenv(envVariable));
         } else {
-            System.out.println("Переменная окружения c загрузочным файлом не найдена. Создайте системную переменную и запустите программу снова.");
+            System.out.println("\u001B[31m" + "Environment variable was FILE not found. Create environment variable and try again");
             System.exit(0);
         }
     }
@@ -94,26 +97,27 @@ public class FileManager {
                 }
                 if (dragons.item(i).getNodeType() != Node.TEXT_NODE) {
                     if (checkFields && elementCreation()) {
-                        System.out.println("Элемент номер " + (i / 2 + 1) + " успешно добавлен в коллекцию");
+                        logger.info("The element number " + (i / 2 + 1) + " has been successfully added to the collection");
                     } else {
-                        System.out.println("Элемент номер " + (i / 2 + 1) + " не может быть добавлен в коллекцию");
+                        logger.info("The element number " + (i / 2 + 1) + " cannot be added to the collection");
                     }
                     clearFields();
                 }
             }
         } catch (ParserConfigurationException e) {
-            System.out.println("Невозможно считать данные из-за ошибки конфигурации");
+            logger.warn("\u001B[31m" + "It is impossible to read from this file because of configuration error");
+            System.exit(0);
         } catch (IOException ex) {
             if (!file.exists()) {
-                System.out.println("Файл с таким именем не найден. Создайте файл и запустите программу снова.");
+                logger.warn("\u001B[31m" + "File with the specified name was not found. Create a file and try again.");
                 System.exit(0);
 
             } else if (file.exists() && !file.canRead()) {
-                System.out.println("Нет прав для чтения файла. Добавьте необходимые права и запустите программу снова.");
+                logger.warn("\u001B[31m" + "It is impossible to read data from this file.");
                 System.exit(0);
             }
         } catch (SAXException ex) {
-            System.out.println("Невозможно считать данные, так как файл имеет неверную структуру");
+            logger.warn("\u001B[31m" + "It is impossible to read data from this file because it has incorrect structure");
             System.exit(0);
         }
         return vector;
@@ -472,7 +476,7 @@ public class FileManager {
             }
             writeDocument(document);
         } catch (ParserConfigurationException e) {
-            System.out.println("Невозможно выполнить данную команду из-за ошибки конфигурации");
+            logger.warn("\u001B[31m" + "It is impossible to write the collection because of configuration error" + "\u001B[0m");
         }
     }
 
@@ -487,24 +491,21 @@ public class FileManager {
             tr.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource dom = new DOMSource(document);
             if (!file.canWrite() && file.exists()) {
-                System.out.println("Невозможно выполнить данную команду, так как отсутвуют права для записи в файл");
+                logger.warn("\u001B[31m" + "It is impossible to write to this file" + "\u001B[0m");
             } else if (!file.exists()) {
-                System.out.println("Файл с указанным именем не найден. Коллекция будет записана в файл \"lab5reserve.xml\"");
-                BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream("lab5reserve.xml"));
+                BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream("lab6reserve.xml"));
                 StreamResult result = new StreamResult(outputStream);
                 tr.transform(dom, result);
-                System.out.println("Коллекция успешно записана в файл");
             } else {
                 BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file));
                 StreamResult result = new StreamResult(outputStream);
                 tr.transform(dom, result);
-                System.out.println("Коллекция успешно записана в файл");
             }
         } catch (TransformerException ex) {
-            System.out.println("Невозможно выполнить данную команду");
+            logger.warn("\u001B[31m" + "It is impossible to write the collection to the file" + "\u001B[0m");
         } catch (FileNotFoundException ex) {
             if (!file.exists()) {
-                System.out.println("Невозможно выполнить данную команду, так как файл с таким именем не найден");
+                logger.warn("\u001B[31m" + "It is impossible to write collection to the file because file with the specified name does not exist" + "\u001B[0m");
             }
         }
     }

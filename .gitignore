@@ -1,4 +1,4 @@
 # Project exclude paths
 /client/target/
-/server/target/
+/connectionAccepter/target/
 /target/

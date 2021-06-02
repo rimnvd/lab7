@@ -1,6 +1,7 @@
 package utility;
 
 import data.*;
+import utility.exception.WrongInputFormatException;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class ElementCreation {
      * @return new dragon
      */
     public Dragon createElement() {
-        String name;
+        String name = null;
         long age;
         DragonType type;
         Color color;
@@ -30,7 +31,11 @@ public class ElementCreation {
         Integer size;
         Double eyesCount;
         Dragon dragon;
-        name = checkName();
+        try {
+            name = checkName();
+        } catch (WrongInputFormatException e) {
+            System.out.println("\u001B[31m" + "\nНеверный формат данных. Повторите ввод" + "\u001B[0m");
+        }
         age = checkAge();
         type = checkType();
         color = checkColor();
@@ -68,7 +73,7 @@ public class ElementCreation {
         try {
             line = scanner.nextLine().trim();
         } catch (NoSuchElementException ex) {
-            System.out.println("Завершение работы программы");
+            System.out.println("Завершение работы клиентского приложения");
             System.exit(0);
             line = null;
         }
@@ -86,12 +91,12 @@ public class ElementCreation {
             try {
                 temp = checker.check(read());
                 System.out.println();
-            } catch (NumberFormatException | NullPointerException ex) {
-                System.out.println("Неверный формат данных. Повторите ввод");
+            } catch (NumberFormatException | WrongInputFormatException ex) {
+                System.out.println("\u001B[31m" + "\nНеверный формат данных. Повторите ввод" + "\u001B[0m");
                 System.out.println();
                 continue;
             } catch (IllegalArgumentException ex) {
-                System.out.println("Данные введены неверно. Повторите ввод");
+                System.out.println("\u001B[31m" + "\nДанные введены неверно. Повторите ввод" + "\u001B[0m");
                 System.out.println();
                 continue;
             }
@@ -176,10 +181,10 @@ public class ElementCreation {
         return readAndCheckField("характер\n" + CharacterConstants, fieldChecker);
     }
 
-    public String checkName() throws NullPointerException {
+    public String checkName() throws WrongInputFormatException {
         FieldChecker<String> fieldChecker = str -> {
             if (str == null) {
-                throw new NullPointerException();
+                throw new WrongInputFormatException();
             }
             return str;
         };

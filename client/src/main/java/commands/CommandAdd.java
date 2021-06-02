@@ -18,11 +18,10 @@ public class CommandAdd extends Command  {
     @Override
     public boolean execute(String enteredCommand) {
         if (!checkCommand(enteredCommand)) {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[31m");
-        } else {
-           return true;
+            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override

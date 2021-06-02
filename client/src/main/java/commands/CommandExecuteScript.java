@@ -30,14 +30,15 @@ public class CommandExecuteScript extends Command {
         if (checkCommand(enteredCommand)) {
             File file = new File(argument(enteredCommand));
             if (file.exists() && !file.canRead()) {
-                System.out.println("Невозможно выполнить данную команду, так как у указанного файла отсутвуют права на чтение");
+                System.out.println("\u001B[31m" + "Невозможно выполнить данную команду, так как у указанного файла отсутвуют права на чтение" + "\u001B[0m");
             } else {
                 try {
                     int data = 0;
                     InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
                     if (path.contains(file.getAbsolutePath())) {
                         data = -1;
-                        System.out.println("Невозможно выполнить команду " + enteredCommand);
+                        System.out.println("\u001B[31m" + "Невозможно выполнить команду " + enteredCommand + "\u001B[0m");
+                        System.out.println();
                     } else {
                         path.add((file).getAbsolutePath());
                     }
@@ -54,57 +55,82 @@ public class CommandExecuteScript extends Command {
                                 Dragon dragon = programProcess.getCommands().get("add").execute(fieldValues(reader), elementCreation);
                                 if (dragon != null) {
                                     programProcess.run(new Request(dragon, programProcess.getCommands().get("add"), fullCommandName));
-                                } else System.out.println("Элемент не может быть добавлен в коллекцию\n");
+                                } else {
+                                    System.out.println("\u001B[31m" + "Элемент не может быть добавлен в коллекцию" + "\u001B[0m");
+                                    System.out.println();
+                                }
                             } else if (fullCommandName.equals("add_if_max")) {
                                 System.out.println(fullCommandName);
                                 System.out.println();
                                 Dragon dragon = programProcess.getCommands().get("add_if_max").execute(fieldValues(reader), elementCreation);
                                 if (dragon != null) {
                                     programProcess.run(new Request(dragon, programProcess.getCommands().get("add"), fullCommandName));
-                                } else System.out.println("Элемент не может быть добавлен в коллекцию\n");
+                                } else {
+                                    System.out.println("\u001B[31m" + "Элемент не может быть добавлен в коллекцию" + "\u001B[0m");
+                                    System.out.println();
+                                }
                             } else if (new Command().commandName(fullCommandName).equals("update")) {
                                 try {
                                     Long id = Long.parseLong(new Command().argument(fullCommandName));
                                     System.out.println(fullCommandName);
                                     System.out.println();
                                     if (id <= 0) {
-                                        System.out.println("Команда " + fullCommandName + " не найдена");
+                                        System.out.println("\u001B[31m" + "Команда " + fullCommandName + " не найдена" + "\u001B[0m");
                                     } else {
                                         Dragon dragon = programProcess.getCommands().get("update").execute(fieldValues(reader), elementCreation);
                                         if (dragon != null) {
                                             programProcess.run(new Request(dragon, programProcess.getCommands().get("update"), fullCommandName));
                                         } else {
-                                            System.out.println("Элемент не может быть добавлен в коллекцию\n");
+                                            System.out.println("\u001B[31m" + "Элемент не может быть добавлен в коллекцию" + "\u001B[0m");
+                                            System.out.println();
                                         }
                                     }
                                 } catch (NumberFormatException ex) {
-                                    System.out.println("Команда " + fullCommandName + " не найдена");
+                                    System.out.println("\u001B[31m" + "Команда " + fullCommandName + " не найдена" + "\u001B[0m");
                                     System.out.println();
                                 }
+                            } else if (new Command().commandName(fullCommandName).equals("remove_lower")) {
+                                System.out.println(fullCommandName);
+                                System.out.println();
+                                Dragon dragon = programProcess.getCommands().get("remove_lower").execute(fieldValues(reader), elementCreation);
+                                if (dragon != null) {
+                                    programProcess.run(new Request(dragon, programProcess.getCommands().get("remove_lower"), fullCommandName));
+                                } else {
+                                    System.out.println("\u001B[31m" + "Невозможно выполнить данную команду" + "\u001B[0m");
+                                    System.out.println();
+                                }
+                            }
+                            else if (new Command().commandName(fullCommandName).equals("execute_script")) {
+                                System.out.println(fullCommandName);
+                                System.out.println();
+                                programProcess.getCommands().get("execute_script").execute(fullCommandName);
                             } else if (programProcess.getCommands().containsKey(new Command().commandName(fullCommandName))) {
                                 System.out.println(fullCommandName);
                                 System.out.println();
                                 programProcess.run(new Request(null, programProcess.getCommands().get(new Command().commandName(fullCommandName)), fullCommandName));
                                 System.out.println();
                             } else if (fullCommandName.length() != 0) {
-                                System.out.println("Команда " + fullCommandName + " не найдена");
+                                System.out.println("\u001B[31m" + "Команда " + fullCommandName + " не найдена" + "\u001B[0m");
                                 System.out.println();
                             }
                             CommandName.delete(0, CommandName.length());
                             if (data == -1) {
                                 path.remove(path.size() - 1);
                                 System.out.println("Выполнение скрипта " + argument(enteredCommand) + " завершено");
+                                if (!path.isEmpty()) {
+                                    System.out.println();
+                                }
                             }
                         }
                     }
                 } catch (FileNotFoundException e) {
-                    System.out.println("Указанный файл не найден");
+                    System.out.println("\u001B[31m" + "Указанный файл не найден" + "\u001B[0m");
                 } catch (IOException e) {
-                    System.out.println("Ошибка ввода-вывода");
+                    System.out.println("\u001B[31m" + "Ошибка ввода-вывода" + "\u001B[0m");
                 }
             }
         } else {
-            System.out.println("Команда не найдена. Введите \"help\" для справки");
+            System.out.println("\u001B[31m" + "Команда не найдена" + "\u001B[0m");
         }
         return true;
     }
