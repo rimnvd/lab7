@@ -50,7 +50,7 @@ public class FileManager {
         if (System.getenv().get(envVariable) != null) {
             this.file = new File(System.getenv(envVariable));
         } else {
-            System.out.println("\u001B[31m" + "Environment variable was FILE not found. Create environment variable and try again");
+            System.out.println("\u001B[31m" + "Environment variable was FILE not found. Create environment variable and try again" + "\u001B[0m");
             System.exit(0);
         }
     }
@@ -105,19 +105,19 @@ public class FileManager {
                 }
             }
         } catch (ParserConfigurationException e) {
-            logger.warn("\u001B[31m" + "It is impossible to read from this file because of configuration error");
+            logger.warn("It is impossible to read from this file because of configuration error");
             System.exit(0);
         } catch (IOException ex) {
             if (!file.exists()) {
-                logger.warn("\u001B[31m" + "File with the specified name was not found. Create a file and try again.");
+                logger.warn("File with the specified name was not found. Create a file and try again.");
                 System.exit(0);
 
             } else if (file.exists() && !file.canRead()) {
-                logger.warn("\u001B[31m" + "It is impossible to read data from this file.");
+                logger.warn("It is impossible to read data from this file.");
                 System.exit(0);
             }
         } catch (SAXException ex) {
-            logger.warn("\u001B[31m" + "It is impossible to read data from this file because it has incorrect structure");
+            logger.warn("It is impossible to read data from this file because it has incorrect structure");
             System.exit(0);
         }
         return vector;
@@ -473,7 +473,7 @@ public class FileManager {
             }
             writeDocument(document);
         } catch (ParserConfigurationException e) {
-            logger.warn("\u001B[31m" + "It is impossible to write the collection because of configuration error" + "\u001B[0m");
+            logger.warn("It is impossible to write the collection because of configuration error");
         }
     }
 
@@ -488,7 +488,7 @@ public class FileManager {
             tr.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource dom = new DOMSource(document);
             if (!file.canWrite() && file.exists()) {
-                logger.warn("\u001B[31m" + "It is impossible to write to this file" + "\u001B[0m");
+                logger.warn("It is impossible to write to this file");
             } else if (!file.exists()) {
                 BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream("lab6reserve.xml"));
                 StreamResult result = new StreamResult(outputStream);
@@ -499,10 +499,10 @@ public class FileManager {
                 tr.transform(dom, result);
             }
         } catch (TransformerException ex) {
-            logger.warn("\u001B[31m" + "It is impossible to write the collection to the file" + "\u001B[0m");
+            logger.warn("It is impossible to write the collection to the file");
         } catch (FileNotFoundException ex) {
             if (!file.exists()) {
-                logger.warn("\u001B[31m" + "It is impossible to write collection to the file because file with the specified name does not exist" + "\u001B[0m");
+                logger.warn("It is impossible to write collection to the file because file with the specified name does not exist");
             }
         }
     }

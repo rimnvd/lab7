@@ -72,7 +72,7 @@ public class ProgramProcess {
             }
         } catch (NoSuchElementException ex) {
             System.out.println();
-            System.out.println("Завершение работы программы");
+            System.out.println("Завершение работы клиентского приложения");
             System.exit(0);
         }
     }
