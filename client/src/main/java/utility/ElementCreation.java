@@ -1,7 +1,7 @@
 package utility;
 
 import data.*;
-import utility.exception.WrongInputFormatException;
+import exceptions.WrongInputFormatException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 

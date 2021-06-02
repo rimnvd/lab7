@@ -1,4 +1,4 @@
-package utility.exception;
+package exceptions;
 
 public class WrongInputFormatException extends Exception {
 }

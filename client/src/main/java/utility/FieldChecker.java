@@ -1,6 +1,6 @@
 package utility;
 
-import utility.exception.WrongInputFormatException;
+import exceptions.WrongInputFormatException;
 
 public interface FieldChecker<T> {
     T check(String str) throws WrongInputFormatException;

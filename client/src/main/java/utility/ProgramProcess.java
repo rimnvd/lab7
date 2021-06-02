@@ -2,7 +2,7 @@ package utility;
 
 import commands.*;
 import data.Dragon;
-import utility.exception.ServerUnavailableException;
+import exceptions.ServerUnavailableException;
 
 import java.io.IOException;
 import java.util.ArrayList;

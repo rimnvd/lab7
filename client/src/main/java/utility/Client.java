@@ -1,6 +1,6 @@
 package utility;
 
-import utility.exception.ServerUnavailableException;
+import exceptions.ServerUnavailableException;
 
 import java.io.*;
 import java.net.InetSocketAddress;
