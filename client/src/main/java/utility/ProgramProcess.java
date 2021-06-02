@@ -2,6 +2,7 @@ package utility;
 
 import commands.*;
 import data.Dragon;
+import utility.exception.ServerUnavailableException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,13 +79,15 @@ public class ProgramProcess {
     }
 
     public void run(Request request) {
-        client.connect();
         try {
+            client.connect();
             client.send(request);
             Response response = client.receive();
             if (!response.getResponse().equals("")) System.out.println(response.getResponse());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (ServerUnavailableException ex) {
+            System.out.println(ex.getMessage());
         }
     }
     public HashMap<String, Command> getCommands() {

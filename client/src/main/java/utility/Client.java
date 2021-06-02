@@ -1,5 +1,7 @@
 package utility;
 
+import utility.exception.ServerUnavailableException;
+
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -18,9 +20,8 @@ public class Client {
         this.address = new InetSocketAddress(ip, port);
     }
 
-    public void connect() {
+    public void connect() throws ServerUnavailableException {
         long start = System.currentTimeMillis();
-        boolean flag = false;
         while (true) {
             try {
                 channel = SocketChannel.open(address);
@@ -28,16 +29,15 @@ public class Client {
                 break;
             } catch (IOException | UnresolvedAddressException ex) {
                 long end = System.currentTimeMillis();
-                if (end - start > 5000 && !flag) {
-                    System.out.println("\u001B[31m" + "Ошибка подкдючения к северу\n" + "\u001B[0m");
-                    flag = true;
+                if (end - start > 5000) {
+                    throw new ServerUnavailableException("\u001B[31m" + "Ошибка подкдючения к северу" + "\u001B[0m");
                 }
             }
         }
 
     }
 
-    public void send(Request request) throws IOException {
+    public void send(Request request) throws IOException, ServerUnavailableException {
         if (channel == null) {
             connect();
         }

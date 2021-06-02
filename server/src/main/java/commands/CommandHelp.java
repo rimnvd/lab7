@@ -33,9 +33,8 @@ public class CommandHelp extends Command {
         commands.put("update id {element}", "обновить значение элемента коллекции, id которого равен заданному");
         commands.put("remove_by_id id", "удалить элемент из коллекции по его id");
         commands.put("clear", "очистить коллекцию");
-        commands.put("save", "сохранить коллекцию в файл");
         commands.put("execute_script file_name", "считать и исполнить скрипт из указанного файла.");
-        commands.put("exit", "завершить программу (без сохранения в файл)");
+        commands.put("exit", "завершить работу клиентского приложения");
         commands.put("remove_last", "удалить последний элемент из коллекции");
         commands.put("add_if_max {element}", "добавить новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции");
         commands.put("remove_lower {element}", "удалить из коллекции все элементы, меньшие, чем заданный");
