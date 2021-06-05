@@ -122,7 +122,6 @@ public class CollectionManager {
      * @return the maximum component of this collection
      */
     public Dragon maxElement() {
-        System.out.println(Collections.max(vector));
         return Collections.max(vector);
     }
 
