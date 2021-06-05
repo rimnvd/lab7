@@ -72,7 +72,7 @@ public class Client {
         } else if (response.getCommandCode() == CommandCode.DEFAULT) {
             if (response.getResult() != null) {
                 response.getResult().forEach(System.out::println);
-            } else if (response.getMessage() != null) System.out.println(response.getMessage());
+            } else if (!response.getMessage().equals("")) System.out.println(response.getMessage());
         } else
             System.out.println(ConsoleColor.ANSI_GREEN.getColor() + response.getMessage() + ConsoleColor.ANSI_RESET.getColor());
     }
