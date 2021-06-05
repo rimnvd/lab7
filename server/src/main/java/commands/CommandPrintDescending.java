@@ -32,7 +32,7 @@ public class CommandPrintDescending extends Command {
         }
         ArrayList<String> result = collectionManager.getCollection().stream()
                 .sorted(Comparator.reverseOrder())
-                .collect(ArrayList::new, (list, drag) -> list.add(drag.toString()), ArrayList::addAll);
+                .collect(ArrayList::new, (list, drag) -> list.add("Dragon " + drag.getName()), ArrayList::addAll);
         return new Response(CommandCode.DEFAULT, result);
     }
 }

@@ -58,8 +58,8 @@ public class CommandExecuteScript extends Command {
                                     programProcess.run(new Request(dragon, programProcess.getCommands().get("add"), fullCommandName));
                                 } else {
                                     System.out.println(ConsoleColor.ANSI_RED.getColor() + "Элемент не может быть добавлен в коллекцию" + ConsoleColor.ANSI_RESET.getColor());
-                                    System.out.println();
                                 }
+                                System.out.println();
                             } else if (fullCommandName.equals("add_if_max")) {
                                 System.out.println(fullCommandName);
                                 System.out.println();
@@ -68,8 +68,8 @@ public class CommandExecuteScript extends Command {
                                     programProcess.run(new Request(dragon, programProcess.getCommands().get("add"), fullCommandName));
                                 } else {
                                     System.out.println(ConsoleColor.ANSI_RED.getColor() + "Элемент не может быть добавлен в коллекцию" + ConsoleColor.ANSI_RESET.getColor());
-                                    System.out.println();
                                 }
+                                System.out.println();
                             } else if (new Command().commandName(fullCommandName).equals("update")) {
                                 try {
                                     Long id = Long.parseLong(new Command().argument(fullCommandName));
