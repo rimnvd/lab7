@@ -22,16 +22,16 @@ public class CommandRemoveAnyByColor extends Command {
      * Executes the command.
      *
      * @param enteredCommand the full name of the entered command
-
      */
     @Override
     public Response execute(String enteredCommand, Dragon dragon) {
         if (collectionManager.isEmpty()) {
-            return new Response("\u001B[31m" + "Невозможно выполнить данную команду, так как коллекция пуста" + "\u001B[0m");
+            return new Response(CommandCode.ERROR, "Невозможно выполнить данную команду, так как коллекция пуста");
         } else {
             if (collectionManager.removeByColor(Color.valueOf(argument(enteredCommand).toUpperCase()))) {
-                return new Response("\u001B[32m" + "Элемент успешно удален из коллекции" + "\u001B[0m");
-            } else return new Response("\u001B[31m" + "Невозможно выполнить данную команду, так как в коллекции нет элемента с таким полем Color" + "\u001B[0m");
+                return new Response(CommandCode.CHANGE, "Элемент успешно удален из коллекции");
+            } else
+                return new Response(CommandCode.ERROR, "Невозможно выполнить данную команду, так как в коллекции нет элемента с таким полем Color");
         }
     }
 

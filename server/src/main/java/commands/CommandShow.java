@@ -5,6 +5,8 @@ import data.Dragon;
 import utility.CollectionManager;
 import utility.Response;
 
+import java.util.ArrayList;
+
 /**
  * This class is responsible for giving information about the elements in the collection.
  */
@@ -24,16 +26,10 @@ public class CommandShow extends Command {
      */
     public Response execute(String enteredCommand, Dragon dragon) {
         if (collectionManager.isEmpty()) {
-            return new Response("Коллекция пуста\n");
-        } else {
-            StringBuilder message = new StringBuilder();
-            for (int i = 0; i < collectionManager.collectionSize(); i++) {
-                message.append(collectionManager.getCollection().get(i).toString());
-                if (i != collectionManager.collectionSize() - 1) {
-                    message.append("\n");
-                }
-            }
-            return new Response(message.toString());
+            return new Response(CommandCode.DEFAULT, "Коллекция пуста");
         }
+        ArrayList<String> result = collectionManager.getCollection().stream()
+                .sorted().collect(ArrayList::new, (list, drag) -> list.add(drag.toString()), ArrayList::addAll);
+        return new Response(CommandCode.DEFAULT, result);
     }
 }

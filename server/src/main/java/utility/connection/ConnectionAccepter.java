@@ -6,12 +6,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-
 public class ConnectionAccepter {
     private final int port;
     private final ServerSocket serverSocket;
     private Socket socket;
-
 
 
     public ConnectionAccepter(int port) throws IOException {

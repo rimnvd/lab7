@@ -5,6 +5,9 @@ import data.Dragon;
 import utility.CollectionManager;
 import utility.Response;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 /**
  * This class is responsible for the grouping elements of the collection by character
  * and counting the number of the elements in each group.
@@ -23,17 +26,14 @@ public class CommandGroupCountingByCharacter extends Command {
      * Executes the command.
      *
      * @param enteredCommand the full name of the entered command
-
      */
     @Override
     public Response execute(String enteredCommand, Dragon dragon) {
-        long good;
-        long cunning;
-        long chaotic_evil;
-        good = collectionManager.countCharacter("GOOD");
-        cunning = collectionManager.countCharacter("CUNNING");
-        chaotic_evil = collectionManager.countCharacter("CHAOTIC_EVIL");
-        return new Response("CUNNING: " + cunning + "\n" + "GOOD: " + good + "\n" + "CHAOTIC_EVIL: " + chaotic_evil);
+        if (collectionManager.isEmpty()) return new Response(CommandCode.DEFAULT, "Коллекция пуста");
+        ArrayList<String> result = collectionManager.getCollection().stream()
+                .collect(Collectors.groupingBy(Dragon::getCharacter, Collectors.counting()))
+                .entrySet().stream().collect(ArrayList::new, (list, es) -> list.add(es.getKey() + ": " + es.getValue()), ArrayList::addAll);
+        return new Response(CommandCode.DEFAULT, result);
     }
 
 

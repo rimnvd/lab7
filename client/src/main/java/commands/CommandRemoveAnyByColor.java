@@ -1,6 +1,6 @@
 package commands;
 
-import data.Color;
+import utility.ConsoleColor;
 
 import java.util.regex.Pattern;
 
@@ -24,7 +24,7 @@ public class CommandRemoveAnyByColor extends Command {
     @Override
     public boolean execute(String enteredCommand) {
         if (!checkCommand(enteredCommand)) {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
             return false;
         }
         return checkColor(argument(enteredCommand).toUpperCase());
@@ -44,13 +44,8 @@ public class CommandRemoveAnyByColor extends Command {
     }
 
     public boolean checkColor(String enteredCommand) {
-        boolean checkValue = true;
-        try {
-            Color.valueOf(enteredCommand);
-        } catch (IllegalArgumentException ex) {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
-            checkValue = false;
-        }
-        return checkValue;
+        if (!enteredCommand.matches("RED|YELLOW|ORANGE|BROWN|WHITE"))
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
+        return enteredCommand.matches("RED|YELLOW|ORANGE|BROWN|WHITE");
     }
 }

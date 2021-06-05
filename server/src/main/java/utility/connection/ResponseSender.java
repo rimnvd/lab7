@@ -13,8 +13,7 @@ public class ResponseSender {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
         objectOutputStream.writeObject(response);
-        ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-        outputStream.writeInt(byteArrayOutputStream.size() + 6);
-        outputStream.writeObject(response);
+        objectOutputStream.writeInt(byteArrayOutputStream.size());
+        byteArrayOutputStream.writeTo(socket.getOutputStream());
     }
 }

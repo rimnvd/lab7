@@ -10,8 +10,8 @@ import java.io.Serializable;
  * General class, superclass for the all classes from the package commands.
  */
 public class Command implements Serializable {
-    private String name;
     private static final long serialVersionUID = 0L;
+    private String name;
 
 
     public Command(String name) {
@@ -27,7 +27,7 @@ public class Command implements Serializable {
     }
 
     public Response execute(String enteredCommand, Dragon dragon) {
-        return new Response();
+        return null;
     }
 
 
@@ -68,8 +68,6 @@ public class Command implements Serializable {
 
     public void execute(String[] fields, Long value) {
     }
-
-
 
 
 }

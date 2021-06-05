@@ -2,7 +2,6 @@ package utility;
 
 import data.Color;
 import data.Dragon;
-import data.DragonCharacter;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -12,10 +11,10 @@ import java.util.Vector;
  * This class is responsible for the working with the collection.
  */
 public class CollectionManager {
+    private final FileManager fileManager;
     private LocalDate date;
     private Long maxId;
     private Vector<Dragon> vector = new Vector<>(0);
-    private final FileManager fileManager;
 
     public CollectionManager(FileManager fileManager) {
         this.fileManager = fileManager;
@@ -100,16 +99,6 @@ public class CollectionManager {
     }
 
     /**
-     * Returns the number of the components in this collection with specified character value.
-     *
-     * @param character character value
-     * @return the number of the components in this collection with specified character value
-     */
-    public long countCharacter(String character) {
-        return vector.stream().filter(dragon -> dragon.getCharacter().equals(DragonCharacter.valueOf(character.toUpperCase()))).count();
-    }
-
-    /**
      * Removes from this collection all of the elements that are lower than the specified element.
      *
      * @param d the element to be compared.
@@ -134,14 +123,6 @@ public class CollectionManager {
      */
     public Dragon maxElement() {
         return Collections.max(vector);
-    }
-
-    /**
-     * Sorts the collection in descending order
-     */
-    public void reverseSort(Vector<Dragon> v) {
-        Collections.sort(v);
-        Collections.reverse(v);
     }
 
     /**

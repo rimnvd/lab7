@@ -5,7 +5,8 @@ import data.Dragon;
 import utility.CollectionManager;
 import utility.Response;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * This class is responsible for printing the collection in descending order.
@@ -23,21 +24,15 @@ public class CommandPrintDescending extends Command {
      * Executes the command.
      *
      * @param enteredCommand the name of the specified command
-
      */
     @Override
     public Response execute(String enteredCommand, Dragon dragon) {
         if (collectionManager.isEmpty()) {
-            return new Response("Коллекция пуста");
-        } else {
-            Vector<Dragon> vector = new Vector<>(collectionManager.getCollection());
-            collectionManager.reverseSort(vector);
-            StringBuilder message = new StringBuilder();
-            for (Dragon dragons : vector) {
-                message.append("Dragon ").append(dragons.getName()).append("\n");
-            }
-            message.deleteCharAt(message.length() - 1);
-            return new Response(message.toString());
+            return new Response(CommandCode.DEFAULT, "Коллекция пуста");
         }
+        ArrayList<String> result = collectionManager.getCollection().stream()
+                .sorted(Comparator.reverseOrder())
+                .collect(ArrayList::new, (list, drag) -> list.add(drag.toString()), ArrayList::addAll);
+        return new Response(CommandCode.DEFAULT, result);
     }
 }

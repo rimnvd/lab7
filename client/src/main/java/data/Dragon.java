@@ -8,16 +8,16 @@ import java.time.LocalDate;
  * This class contains the description of the elements stored in the collection.
  */
 public class Dragon implements Comparable<Dragon>, Serializable {
-    private Long id;
+    private static final long serialVersionUID = 20L;
     private final String name;
     private final Coordinates coordinates;
-    private LocalDate creationDate;
     private final long age;
     private final Color color;
     private final DragonType type;
     private final DragonCharacter character;
+    private Long id;
+    private LocalDate creationDate;
     private DragonHead head;
-    private static final long serialVersionUID = 20L;
 
     public Dragon(String name,
                   long age,
@@ -166,10 +166,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
 
     @Override
     public int compareTo(Dragon d) {
-        if (this.getAge() == d.getAge()) {
-            return getName().compareTo(d.getName());
-        }
-        return Long.compare(this.getAge(), d.getAge());
+        return name.compareTo(d.getName());
     }
 
     @Override

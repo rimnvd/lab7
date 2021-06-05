@@ -27,11 +27,12 @@ public class CommandAddIfMax extends Command {
     public Response execute(String enteredCommand, Dragon dragon) {
         if (collectionManager.isEmpty()) {
             collectionManager.addToCollection(dragon);
-            return new Response("\u001B[32m" + "Элемент успешно добавлен в коллекцию" + "\u001B[0m");
+            return new Response(CommandCode.CHANGE, "Элемент успешно добавлен в коллекцию");
         } else if (dragon.compareTo(collectionManager.maxElement()) > 0) {
-            if (collectionManager.addToCollection(dragon)) return new Response("\u001B[32m" + "Элемент успешно добавлен в коллекцию" + "\u001B[0m");
+            if (collectionManager.addToCollection(dragon))
+                return new Response(CommandCode.CHANGE, "Элемент успешно добавлен в коллекцию");
         }
-        return new Response();
+        return new Response(CommandCode.DEFAULT);
     }
 
 }

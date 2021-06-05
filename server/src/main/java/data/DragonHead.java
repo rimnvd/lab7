@@ -6,9 +6,9 @@ import java.io.Serializable;
  * This class is responsible for the head of the dragon.
  */
 public class DragonHead implements Serializable {
+    private static final long serialVersionUID = 22L;
     private final Integer size;
     private final Double eyesCount;
-    private static final long serialVersionUID = 22L;
 
     public DragonHead(Integer size, Double eyesCount) {
         this.eyesCount = eyesCount;

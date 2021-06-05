@@ -5,6 +5,8 @@ import data.Dragon;
 import utility.CollectionManager;
 import utility.Response;
 
+import java.util.ArrayList;
+
 /**
  * This class is responsible for giving information about the collection.
  */
@@ -26,7 +28,11 @@ public class CommandInfo extends Command {
      */
     @Override
     public Response execute(String enteredCommand, Dragon dragon) {
-        return new Response("Тип коллекции: " + collectionManager.collectionType() + "\nДата инициализации коллекции: " + collectionManager.getDate() + "\nКоличество элементов коллекции: " + collectionManager.collectionSize());
+        ArrayList<String> result = new ArrayList<>();
+        result.add("Тип коллекции: " + collectionManager.collectionType());
+        result.add("Дата инициализации коллекции: " + collectionManager.getDate());
+        result.add("Количество элементов коллекции: " + collectionManager.collectionSize());
+        return new Response(CommandCode.DEFAULT, result);
     }
 }
 

@@ -10,8 +10,8 @@ import java.io.Serializable;
  * General class, superclass for the all classes from the package commands.
  */
 public class Command implements Serializable {
-    private String name;
     private static final long serialVersionUID = 0L;
+    private String name;
 
     public Command(String name) {
         this.name = name;
@@ -65,11 +65,6 @@ public class Command implements Serializable {
     public Dragon execute(String[] fields, ElementCreation elementCreation) {
         return null;
     }
-
-
-
-
-
 
 
 }

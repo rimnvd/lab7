@@ -8,8 +8,6 @@ import utility.Response;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.rmi.AlreadyBoundException;
-
 
 
 public class Server {
@@ -21,7 +19,7 @@ public class Server {
     private final ResponseSender responseSender;
     private final CollectionManager collectionManager;
 
-    public Server (int port, CollectionManager collectionManager) throws IOException {
+    public Server(int port, CollectionManager collectionManager) throws IOException {
         this.connectionAccepter = new ConnectionAccepter(port);
         this.requestReceiver = new RequestReceiver();
         this.collectionManager = collectionManager;
@@ -42,7 +40,7 @@ public class Server {
                 request = requestReceiver.getRequest(socket);
                 logger.info("Request has received");
                 response = processingRequest.process(request);
-                logger.info("Command " + request.getCommandName().getName() + " has executed");
+                logger.info("Command {} has executed", request.getCommandName().getName());
                 responseSender.send(response, socket);
                 logger.info("Response has been sent\n");
             } catch (IOException e) {

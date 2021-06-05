@@ -2,12 +2,13 @@ package commands;
 
 
 import data.Dragon;
+import utility.ConsoleColor;
 import utility.ElementCreation;
 
 /**
  * This class is responsible for the adding an element to the collection.
  */
-public class CommandAdd extends Command  {
+public class CommandAdd extends Command {
     private static final long serialVersionUID = 1L;
 
     public CommandAdd() {
@@ -18,7 +19,7 @@ public class CommandAdd extends Command  {
     @Override
     public boolean execute(String enteredCommand) {
         if (!checkCommand(enteredCommand)) {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
             return false;
         }
         return true;

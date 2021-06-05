@@ -18,10 +18,9 @@ public class CommandClear extends Command {
     }
 
 
-
     @Override
     public Response execute(String enteredCommand, Dragon dragon) {
         collectionManager.clear();
-        return new Response("\u001B[32m" + "Коллекция успешно очищена" + "\u001B[0m");
+        return new Response(CommandCode.CHANGE, "Коллекция успешно очищена");
     }
 }

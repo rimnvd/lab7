@@ -27,6 +27,8 @@ import java.util.Vector;
  * This class is responsible for the operations with file.
  */
 public class FileManager {
+    private final Vector<Dragon> vector = new Vector<>(0);
+    private final Logger logger = LoggerFactory.getLogger(FileManager.class);
     private String name;
     private long age;
     private Color color;
@@ -39,18 +41,16 @@ public class FileManager {
     private Double eyesCount;
     private Long id;
     private LocalDate creationDate;
-    private final Vector<Dragon> vector = new Vector<>(0);
     private File file;
     private boolean checkHeadSize;
     private boolean checkEyesNumber;
     private Long maxId = null;
-    private final Logger logger = LoggerFactory.getLogger(FileManager.class);
 
     public FileManager(String envVariable) {
         if (System.getenv().get(envVariable) != null) {
             this.file = new File(System.getenv(envVariable));
         } else {
-            System.out.println("\u001B[31m" + "Environment variable was FILE not found. Create environment variable and try again" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Environment variable was FILE not found. Create environment variable and try again" + ConsoleColor.ANSI_RESET.getColor());
             System.exit(0);
         }
     }

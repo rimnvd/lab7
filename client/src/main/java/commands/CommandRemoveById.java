@@ -1,6 +1,8 @@
 package commands;
 
 
+import utility.ConsoleColor;
+
 import java.util.regex.Pattern;
 
 /**
@@ -17,7 +19,7 @@ public class CommandRemoveById extends Command {
     @Override
     public boolean execute(String enteredCommand) {
         if (!checkCommand(enteredCommand)) {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
             return false;
         }
         return checkId(argument(enteredCommand));
@@ -30,12 +32,15 @@ public class CommandRemoveById extends Command {
      * @return true if String S is a number; false otherwise
      */
     public boolean checkId(String enteredCommand) {
-        boolean checkValue;
+        boolean checkValue = true;
         try {
-            Long.parseLong(enteredCommand);
-            checkValue = true;
+            long id = Long.parseLong(enteredCommand);
+            if (id <= 0) {
+                checkValue = false;
+                System.out.println(ConsoleColor.ANSI_RED.getColor() + "Невозможно выполнить данную команду, так как id должен быть положительным" + ConsoleColor.ANSI_RESET.getColor());
+            }
         } catch (NumberFormatException ex) {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
             checkValue = false;
         }
         return checkValue;
@@ -49,7 +54,7 @@ public class CommandRemoveById extends Command {
      */
     @Override
     public boolean checkCommand(String EnteredCommand) {
-        Pattern pattern = Pattern.compile("^remove_by_id(\\s\\d+)$", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^remove_by_id(\\s-?\\d+)$", Pattern.CASE_INSENSITIVE);
         return pattern.matcher(EnteredCommand).find();
     }
 

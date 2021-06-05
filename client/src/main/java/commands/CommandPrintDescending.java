@@ -1,6 +1,8 @@
 package commands;
 
 
+import utility.ConsoleColor;
+
 /**
  * This class is responsible for printing the collection in descending order.
  */
@@ -22,7 +24,7 @@ public class CommandPrintDescending extends Command {
         if (checkCommand(enteredCommand)) {
             return true;
         } else {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
             return false;
         }
     }

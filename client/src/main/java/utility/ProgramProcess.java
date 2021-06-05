@@ -58,7 +58,8 @@ public class ProgramProcess {
                     } else {
                         if (commands.get(new Command().commandName(line)).execute(line)) {
                             Dragon dragon;
-                            if (new Command().commandName(line).equals("add") || new Command().commandName(line).equals("add_if_max") || new Command().commandName(line).equals("update") || new Command().commandName(line).equals("remove_lower")) {
+                            if (new Command().commandName(line).equals("add") || new Command().commandName(line).equals("add_if_max")
+                                    || new Command().commandName(line).equals("update") || new Command().commandName(line).equals("remove_lower")) {
                                 dragon = elementCreation.createElement();
                                 request = new Request(dragon, commands.get(new Command().commandName(line)), line);
                             } else request = new Request(commands.get(new Command().commandName(line)), line);
@@ -66,7 +67,7 @@ public class ProgramProcess {
                         }
                     }
                 } else {
-                    System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
                 }
                 System.out.println();
                 System.out.println("Введите команду");
@@ -83,13 +84,14 @@ public class ProgramProcess {
             client.connect();
             client.send(request);
             Response response = client.receive();
-            if (!response.getResponse().equals("")) System.out.println(response.getResponse());
+            client.getResponse(response);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } catch (ServerUnavailableException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Ошибка подкдючения к северу" + ConsoleColor.ANSI_RESET.getColor());
         }
     }
+
     public HashMap<String, Command> getCommands() {
         return commands;
     }

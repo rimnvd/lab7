@@ -1,6 +1,8 @@
 package commands;
 
 
+import utility.ConsoleColor;
+
 /**
  * This class is responsible for the removing all of the elements from the collection.
  */
@@ -23,7 +25,7 @@ public class CommandClear extends Command {
         if (checkCommand(enteredCommand)) {
             return true;
         } else {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
         }
         return false;
     }

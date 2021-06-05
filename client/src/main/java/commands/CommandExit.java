@@ -1,6 +1,8 @@
 package commands;
 
 
+import utility.ConsoleColor;
+
 /**
  * This class is responsible for the completing the programme.
  */
@@ -17,7 +19,7 @@ public class CommandExit extends Command {
             System.out.println("Завершение работы клиентского приложения");
             System.exit(0);
         } else {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
         }
         return false;
     }

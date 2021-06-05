@@ -1,6 +1,7 @@
 package commands;
 
 import data.Dragon;
+import utility.ConsoleColor;
 import utility.ElementCreation;
 import utility.ProgramProcess;
 import utility.Request;
@@ -30,14 +31,14 @@ public class CommandExecuteScript extends Command {
         if (checkCommand(enteredCommand)) {
             File file = new File(argument(enteredCommand));
             if (file.exists() && !file.canRead()) {
-                System.out.println("\u001B[31m" + "Невозможно выполнить данную команду, так как у указанного файла отсутвуют права на чтение" + "\u001B[0m");
+                System.out.println(ConsoleColor.ANSI_RED.getColor() + "Невозможно выполнить данную команду, так как у указанного файла отсутвуют права на чтение" + ConsoleColor.ANSI_RESET.getColor());
             } else {
                 try {
                     int data = 0;
                     InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
                     if (path.contains(file.getAbsolutePath())) {
                         data = -1;
-                        System.out.println("\u001B[31m" + "Невозможно выполнить команду " + enteredCommand + "\u001B[0m");
+                        System.out.println(ConsoleColor.ANSI_RED.getColor() + "Невозможно выполнить команду " + enteredCommand + ConsoleColor.ANSI_RESET.getColor());
                         System.out.println();
                     } else {
                         path.add((file).getAbsolutePath());
@@ -56,7 +57,7 @@ public class CommandExecuteScript extends Command {
                                 if (dragon != null) {
                                     programProcess.run(new Request(dragon, programProcess.getCommands().get("add"), fullCommandName));
                                 } else {
-                                    System.out.println("\u001B[31m" + "Элемент не может быть добавлен в коллекцию" + "\u001B[0m");
+                                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Элемент не может быть добавлен в коллекцию" + ConsoleColor.ANSI_RESET.getColor());
                                     System.out.println();
                                 }
                             } else if (fullCommandName.equals("add_if_max")) {
@@ -66,7 +67,7 @@ public class CommandExecuteScript extends Command {
                                 if (dragon != null) {
                                     programProcess.run(new Request(dragon, programProcess.getCommands().get("add"), fullCommandName));
                                 } else {
-                                    System.out.println("\u001B[31m" + "Элемент не может быть добавлен в коллекцию" + "\u001B[0m");
+                                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Элемент не может быть добавлен в коллекцию" + ConsoleColor.ANSI_RESET.getColor());
                                     System.out.println();
                                 }
                             } else if (new Command().commandName(fullCommandName).equals("update")) {
@@ -75,18 +76,18 @@ public class CommandExecuteScript extends Command {
                                     System.out.println(fullCommandName);
                                     System.out.println();
                                     if (id <= 0) {
-                                        System.out.println("\u001B[31m" + "Команда " + fullCommandName + " не найдена" + "\u001B[0m");
+                                        System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда " + fullCommandName + " не найдена" + ConsoleColor.ANSI_RESET.getColor());
                                     } else {
                                         Dragon dragon = programProcess.getCommands().get("update").execute(fieldValues(reader), elementCreation);
                                         if (dragon != null) {
                                             programProcess.run(new Request(dragon, programProcess.getCommands().get("update"), fullCommandName));
                                         } else {
-                                            System.out.println("\u001B[31m" + "Невозможно выполнить данную команду" + "\u001B[0m");
+                                            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Невозможно выполнить данную команду" + ConsoleColor.ANSI_RESET.getColor());
                                             System.out.println();
                                         }
                                     }
                                 } catch (NumberFormatException ex) {
-                                    System.out.println("\u001B[31m" + "Команда " + fullCommandName + " не найдена" + "\u001B[0m");
+                                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда " + fullCommandName + " не найдена" + ConsoleColor.ANSI_RESET.getColor());
                                     System.out.println();
                                 }
                             } else if (new Command().commandName(fullCommandName).equals("remove_lower")) {
@@ -96,11 +97,10 @@ public class CommandExecuteScript extends Command {
                                 if (dragon != null) {
                                     programProcess.run(new Request(dragon, programProcess.getCommands().get("remove_lower"), fullCommandName));
                                 } else {
-                                    System.out.println("\u001B[31m" + "Невозможно выполнить данную команду" + "\u001B[0m");
+                                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Невозможно выполнить данную команду" + ConsoleColor.ANSI_RESET.getColor());
                                     System.out.println();
                                 }
-                            }
-                            else if (new Command().commandName(fullCommandName).equals("execute_script")) {
+                            } else if (new Command().commandName(fullCommandName).equals("execute_script")) {
                                 System.out.println(fullCommandName);
                                 System.out.println();
                                 programProcess.getCommands().get("execute_script").execute(fullCommandName);
@@ -110,7 +110,7 @@ public class CommandExecuteScript extends Command {
                                 programProcess.run(new Request(null, programProcess.getCommands().get(new Command().commandName(fullCommandName)), fullCommandName));
                                 System.out.println();
                             } else if (fullCommandName.length() != 0) {
-                                System.out.println("\u001B[31m" + "Команда " + fullCommandName + " не найдена" + "\u001B[0m");
+                                System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда " + fullCommandName + " не найдена" + ConsoleColor.ANSI_RESET.getColor());
                                 System.out.println();
                             }
                             CommandName.delete(0, CommandName.length());
@@ -124,13 +124,13 @@ public class CommandExecuteScript extends Command {
                         }
                     }
                 } catch (FileNotFoundException e) {
-                    System.out.println("\u001B[31m" + "Указанный файл не найден" + "\u001B[0m");
+                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Указанный файл не найден" + ConsoleColor.ANSI_RESET.getColor());
                 } catch (IOException e) {
-                    System.out.println("\u001B[31m" + "Ошибка ввода-вывода" + "\u001B[0m");
+                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Ошибка ввода-вывода" + ConsoleColor.ANSI_RESET.getColor());
                 }
             }
         } else {
-            System.out.println("\u001B[31m" + "Команда не найдена" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена" + ConsoleColor.ANSI_RESET.getColor());
         }
         return true;
     }

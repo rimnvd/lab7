@@ -6,10 +6,10 @@ import data.Dragon;
 import java.io.Serializable;
 
 public class Request implements Serializable {
+    private static final long serialVersionUID = 30L;
     private final Dragon dragon;
     private final Command commandName;
     private final String fullCommand;
-    private static final long serialVersionUID = 30L;
 
     public Request(Dragon dragon, Command commandName, String fullCommand) {
         this.dragon = dragon;

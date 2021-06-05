@@ -4,9 +4,8 @@ package commands;
 import data.Dragon;
 import utility.Response;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * This class is responsible for giving information about all the commands in the application.
@@ -41,13 +40,9 @@ public class CommandHelp extends Command {
         commands.put("remove_any_by_color color", "удалить из коллекции один элемент, значение поля color которого эквивалентно заданному");
         commands.put("group_counting_by_character", "сгруппировать элементы коллекции по значению поля character, вывести количество элементов в каждой группе");
         commands.put("print_descending", "вывести элементы коллекции в порядке убывания");
-        Set<Map.Entry<String, String>> pairs = commands.entrySet();
-        StringBuilder message = new StringBuilder();
-        for (Map.Entry<String, String> i : pairs) {
-            message.append(i.getKey()).append(": ").append(i.getValue()).append("\n");
-        }
-        message.deleteCharAt(message.length() - 1);
-        return new Response(message.toString());
+        ArrayList<String> result = commands.entrySet().stream()
+                .collect(ArrayList::new, (list, es) -> list.add(es.getKey() + ": " + es.getValue()), ArrayList::addAll);
+        return new Response(CommandCode.DEFAULT, result);
     }
 
 }

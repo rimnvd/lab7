@@ -2,6 +2,7 @@ package utility;
 
 import data.*;
 import exceptions.WrongInputFormatException;
+
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ import java.util.Scanner;
  */
 public class ElementCreation {
     private final Scanner scanner;
+
     public ElementCreation(Scanner scanner) {
         this.scanner = scanner;
     }
@@ -37,7 +39,7 @@ public class ElementCreation {
             color = checkColor();
             character = checkCharacter();
         } catch (WrongInputFormatException e) {
-            System.out.println("\u001B[31m" + "\nНеверный формат данных. Повторите ввод" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "\nНеверный формат данных. Повторите ввод" + ConsoleColor.ANSI_RESET.getColor());
         }
 
         x = checkX();
@@ -92,11 +94,7 @@ public class ElementCreation {
                 temp = checker.check(read());
                 System.out.println();
             } catch (NumberFormatException | WrongInputFormatException ex) {
-                System.out.println("\u001B[31m" + "\nНеверный формат данных. Повторите ввод" + "\u001B[0m");
-                System.out.println();
-                continue;
-            } catch (IllegalArgumentException ex) {
-                System.out.println("\u001B[31m" + "\nДанные введены неверно. Повторите ввод" + "\u001B[0m");
+                System.out.println(ConsoleColor.ANSI_RED.getColor() + "\nНеверный формат данных. Повторите ввод" + ConsoleColor.ANSI_RESET.getColor());
                 System.out.println();
                 continue;
             }
@@ -190,7 +188,7 @@ public class ElementCreation {
             if (str.toUpperCase().matches("GOOD|CUNNING|CHAOTIC_EVIL")) {
                 return DragonCharacter.valueOf(str.toUpperCase());
             }
-            throw  new WrongInputFormatException();
+            throw new WrongInputFormatException();
         };
         StringBuilder CharacterConstants = new StringBuilder();
         for (DragonCharacter character : DragonCharacter.values()) {

@@ -2,6 +2,7 @@ package commands;
 
 
 import data.Dragon;
+import utility.ConsoleColor;
 import utility.ElementCreation;
 
 /**
@@ -25,7 +26,7 @@ public class CommandAddIfMax extends Command {
     @Override
     public boolean execute(String enteredCommand) {
         if (!checkCommand(enteredCommand)) {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
             return false;
         }
         return true;

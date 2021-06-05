@@ -26,10 +26,10 @@ public class CommandRemoveLast extends Command {
     @Override
     public Response execute(String enteredCommand, Dragon dragon) {
         if (collectionManager.isEmpty()) {
-            return new Response("\u001B[31m" + "Невозможно выполнить данную команду, так как коллекция пуста" + "\u001B[0m");
+            return new Response(CommandCode.ERROR, "Невозможно выполнить данную команду, так как коллекция пуста");
         } else {
             collectionManager.removeLast();
-            return new Response("\u001B[32m" + "Элемент успешно удален из коллекции" + "\u001B[0m");
+            return new Response(CommandCode.CHANGE, "Элемент успешно удален из коллекции");
         }
     }
 }

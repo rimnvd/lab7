@@ -1,5 +1,6 @@
 package utility;
 
+import commands.CommandCode;
 import exceptions.ServerUnavailableException;
 
 import java.io.*;
@@ -11,12 +12,11 @@ import java.nio.channels.UnresolvedAddressException;
 
 
 public class Client {
-    private SocketChannel channel;
     private final SocketAddress address;
+    private SocketChannel channel;
 
 
-
-    public Client(String ip, int port) throws UnresolvedAddressException{
+    public Client(String ip, int port) throws UnresolvedAddressException {
         this.address = new InetSocketAddress(ip, port);
     }
 
@@ -30,7 +30,7 @@ public class Client {
             } catch (IOException | UnresolvedAddressException ex) {
                 long end = System.currentTimeMillis();
                 if (end - start > 5000) {
-                    throw new ServerUnavailableException("\u001B[31m" + "Ошибка подкдючения к северу" + "\u001B[0m");
+                    throw new ServerUnavailableException();
                 }
             }
         }
@@ -50,27 +50,30 @@ public class Client {
     public Response receive() throws IOException, ClassNotFoundException {
         Response response;
         ByteBuffer buffer = ByteBuffer.allocate(16384);
-        while (buffer.position() < 8) {
+        while (buffer.position() < 4) {
             channel.read(buffer);
         }
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array());
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-        int numberOfBytes = objectInputStream.readInt();
-        while (buffer.position() != numberOfBytes) {
-            channel.read(buffer);
-        }
-        byteArrayInputStream = new ByteArrayInputStream(buffer.array());
-        objectInputStream = new ObjectInputStream(byteArrayInputStream);
-        objectInputStream.readInt();
         response = (Response) objectInputStream.readObject();
         return response;
     }
 
-    public byte[] serialize(Request request) throws IOException{
+    public byte[] serialize(Request request) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
         objectOutputStream.writeObject(request);
         return byteArrayOutputStream.toByteArray();
     }
 
+    public void getResponse(Response response) {
+        if (response.getCommandCode() == CommandCode.ERROR) {
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + response.getMessage() + ConsoleColor.ANSI_RESET.getColor());
+        } else if (response.getCommandCode() == CommandCode.DEFAULT) {
+            if (response.getResult() != null) {
+                response.getResult().forEach(System.out::println);
+            } else if (response.getMessage() != null) System.out.println(response.getMessage());
+        } else
+            System.out.println(ConsoleColor.ANSI_GREEN.getColor() + response.getMessage() + ConsoleColor.ANSI_RESET.getColor());
+    }
 }

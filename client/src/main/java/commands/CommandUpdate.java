@@ -1,6 +1,7 @@
 package commands;
 
 import data.Dragon;
+import utility.ConsoleColor;
 import utility.ElementCreation;
 
 import java.util.regex.Pattern;
@@ -23,7 +24,7 @@ public class CommandUpdate extends Command {
      */
     public boolean execute(String enteredCommand) {
         if (!checkCommand(enteredCommand)) {
-            System.out.println("Команда не найдена. Введите \"help\" для справки");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
             return false;
         } else return checkId(argument(enteredCommand));
     }
@@ -41,10 +42,10 @@ public class CommandUpdate extends Command {
             long id = Long.parseLong(enteredCommand);
             if (id > 0) checkValue = true;
             else {
-                System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+                System.out.println(ConsoleColor.ANSI_RED.getColor() + "Невозможно выполнить данную команду, так как id должен быть положительным" + ConsoleColor.ANSI_RESET.getColor());
             }
         } catch (NumberFormatException ex) {
-            System.out.println("\u001B[31m" + "Команда не найдена. Введите \"help\" для справки" + "\u001B[0m");
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда не найдена. Введите \"help\" для справки" + ConsoleColor.ANSI_RESET.getColor());
         }
         return checkValue;
     }
@@ -58,7 +59,7 @@ public class CommandUpdate extends Command {
      */
     @Override
     public boolean checkCommand(String EnteredCommand) {
-        Pattern pattern = Pattern.compile("^update(\\s\\d+)$", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^update(\\s-?\\d+)$", Pattern.CASE_INSENSITIVE);
         return pattern.matcher(EnteredCommand).find();
     }
 
