@@ -50,10 +50,9 @@ public class Client {
     public Response receive() throws IOException, ClassNotFoundException {
         Response response;
         ByteBuffer buffer = ByteBuffer.allocate(4);
-        int bytesRead;
         do {
-            bytesRead = channel.read(buffer);
-        } while (bytesRead != 4);
+            channel.read(buffer);
+        } while (buffer.hasRemaining());
         buffer.flip();
         buffer = ByteBuffer.allocate(buffer.getInt());
 
