@@ -49,10 +49,18 @@ public class Client {
 
     public Response receive() throws IOException, ClassNotFoundException {
         Response response;
-        ByteBuffer buffer = ByteBuffer.allocate(16384);
-        while (buffer.position() < 4) {
+        ByteBuffer buffer = ByteBuffer.allocate(4);
+        int bytesRead;
+        do {
+            bytesRead = channel.read(buffer);
+        } while (bytesRead != 4);
+        buffer.flip();
+        buffer = ByteBuffer.allocate(buffer.getInt());
+
+        while (buffer.hasRemaining()) {
             channel.read(buffer);
         }
+
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array());
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
         response = (Response) objectInputStream.readObject();

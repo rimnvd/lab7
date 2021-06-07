@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 
 public class ResponseSender {
 
@@ -13,7 +14,7 @@ public class ResponseSender {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
         objectOutputStream.writeObject(response);
-        objectOutputStream.writeInt(byteArrayOutputStream.size());
+        socket.getOutputStream().write(ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array());
         byteArrayOutputStream.writeTo(socket.getOutputStream());
     }
 }
