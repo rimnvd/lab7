@@ -16,7 +16,7 @@ public class DataBaseConnection {
             checkVariables();
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(url, login, password);
-            System.out.println("Подключение к базе данных установлено");
+            System.out.println("");
     }
 
     public void checkVariables() {

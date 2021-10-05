@@ -41,7 +41,6 @@ public class DataBaseCollectionManager {
             vector.add(dragon);
         }
         statement.close();
-        System.out.println("Коллекция успешно загружена из базы данных");
 
     }
 
@@ -85,6 +84,7 @@ public class DataBaseCollectionManager {
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE dragons SET name = ?, x_coordinate = ?, y_coordinate = ?, creation_date = ?, age = ?, " +
                 "color = ?, dragon_type = ?, dragon_character = ?,  size = ?, eyes_count = ? WHERE id = ?");
         setDragon(preparedStatement, dragon);
+        preparedStatement.setLong(11, id);
         preparedStatement.executeUpdate();
     }
 

@@ -13,8 +13,6 @@ public class Main {
         final int port;
         DataBaseConnection dataBaseConnection;
         DataBaseUserManager dataBaseUserManager;
-        //final String env = "FILE";
-        //FileManager fileManager = new FileManager(env);
         System.out.println();
         if (System.getenv().get("PORT") == null) {
             System.out.println(ConsoleColor.ANSI_RED.getColor() + "Environment variable PORT was not found" + ConsoleColor.ANSI_RESET.getColor());
