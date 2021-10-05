@@ -15,7 +15,7 @@ public class DataBaseInitializer {
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS users(" +
-                    "username varchar(255) PRIMARY KEY," +
+                    "username varchar(255)," +
                     "password BYTEA DEFAULT (null))");
             statement.executeUpdate("CREATE SEQUENCE IF NOT EXISTS ids START 1");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS dragons(" +
