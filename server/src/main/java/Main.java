@@ -2,6 +2,7 @@ import utility.*;
 import utility.connection.Server;
 import utility.database.DataBaseCollectionManager;
 import utility.database.DataBaseConnection;
+import utility.database.DataBaseInitializer;
 import utility.database.DataBaseUserManager;
 
 import java.io.IOException;
@@ -21,12 +22,13 @@ public class Main {
                 port = Integer.parseInt(System.getenv("PORT"));
                 if (port < 0 || port > 0xFFFF) {
                     System.out.println(ConsoleColor.ANSI_RED.getColor() + "Wrong data format of PORT variable" + ConsoleColor.ANSI_RESET.getColor());
-                    //return;
                 }
                 dataBaseConnection = new DataBaseConnection();
+                DataBaseInitializer dataBaseInitializer = new DataBaseInitializer(dataBaseConnection);
                 dataBaseUserManager = new DataBaseUserManager(dataBaseConnection);
                 CollectionManager collectionManager = new CollectionManager();
                 DataBaseCollectionManager dataBaseCollectionManager = new DataBaseCollectionManager(dataBaseConnection);
+                dataBaseInitializer.initializeTables();
                 dataBaseCollectionManager.loadCollectionFromDB(collectionManager.getCollection());
                 Server server = new Server(port, collectionManager, dataBaseUserManager, dataBaseCollectionManager);
                 server.run();
