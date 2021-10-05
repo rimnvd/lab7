@@ -23,7 +23,7 @@ public class CommandHelp extends Command {
      * @param enteredCommand the full name of the entered command
      */
     @Override
-    public Response execute(String enteredCommand, Dragon dragon) {
+    public Response execute(String enteredCommand, Dragon dragon, String username) {
         HashMap<String, String> commands = new HashMap<>();
         commands.put("help", "вывести справку по доступным командам");
         commands.put("info", "вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)");
@@ -42,7 +42,7 @@ public class CommandHelp extends Command {
         commands.put("print_descending", "вывести элементы коллекции в порядке убывания");
         ArrayList<String> result = commands.entrySet().stream()
                 .collect(ArrayList::new, (list, es) -> list.add(es.getKey() + ": " + es.getValue()), ArrayList::addAll);
-        return new Response(CommandCode.DEFAULT, result);
+        return new Response(ResultCode.DEFAULT, result);
     }
 
 }

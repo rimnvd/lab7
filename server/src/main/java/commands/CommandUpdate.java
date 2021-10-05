@@ -3,6 +3,11 @@ package commands;
 import data.Dragon;
 import utility.CollectionManager;
 import utility.Response;
+import utility.database.DataBaseCollectionManager;
+import utility.database.NoIdException;
+import utility.database.NoPermissionException;
+
+import java.sql.SQLException;
 
 
 /**
@@ -11,10 +16,12 @@ import utility.Response;
 public class CommandUpdate extends Command {
     private static final long serialVersionUID = 13L;
     private final CollectionManager collectionManager;
+    private final DataBaseCollectionManager dbCollectionManager;
 
-    public CommandUpdate(CollectionManager collectionManager) {
+    public CommandUpdate(CollectionManager collectionManager, DataBaseCollectionManager dbCollectionManager) {
         super("update");
         this.collectionManager = collectionManager;
+        this.dbCollectionManager = dbCollectionManager;
     }
 
     /**
@@ -22,15 +29,22 @@ public class CommandUpdate extends Command {
      *
      * @param enteredCommand the full name of the entered command
      */
-    public Response execute(String enteredCommand, Dragon dragon) {
+    public Response execute(String enteredCommand, Dragon dragon, String username) {
         if (collectionManager.isEmpty()) {
-            return new Response(CommandCode.ERROR, "Невозможно выполнить данную команду, так как коллекция пуста");
+            return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду, так как коллекция пуста");
         } else {
-            if (collectionManager.updateById(Long.parseLong(argument(enteredCommand)), dragon)) {
-                return new Response(CommandCode.ERROR, "Невозможно выполнить данную команду, так как в коллекции нет элемента с такими значением id");
-            } else {
-                return new Response(CommandCode.CHANGE, "Элемент с id " + argument(enteredCommand) + " успешно обновлен");
+            Long id = Long.parseLong(argument(enteredCommand));
+            try {
+                dbCollectionManager.updateById(username, id, dragon);
+            } catch (NoPermissionException e) {
+                return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду, так как у вас нет доступа к элементу с id = " + id);
+            } catch (NoIdException e) {
+                return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду, так как в коллекции нет элемента с таким значением id");
+            } catch (SQLException e) {
+                return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду");
             }
+            collectionManager.updateById(Long.parseLong(argument(enteredCommand)), dragon);
+            return new Response(ResultCode.CHANGE, "Элемент с id " + argument(enteredCommand) + " успешно обновлен");
         }
     }
 }

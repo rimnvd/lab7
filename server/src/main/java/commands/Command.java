@@ -26,7 +26,7 @@ public class Command implements Serializable {
         return name;
     }
 
-    public Response execute(String enteredCommand, Dragon dragon) {
+    public Response execute(String enteredCommand, Dragon dragon, String username) {
         return null;
     }
 

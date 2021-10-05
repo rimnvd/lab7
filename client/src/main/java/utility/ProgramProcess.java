@@ -19,11 +19,14 @@ public class ProgramProcess {
     private final ArrayList<String> path = new ArrayList<>();
     private final Scanner scanner;
     private final Client client;
+    private final Authorization authorization;
+    private Session session;
 
-    public ProgramProcess(ElementCreation elementCreation, Scanner scanner, Client client) {
+    public ProgramProcess(ElementCreation elementCreation, Scanner scanner, Client client, Authorization authorization) {
         this.elementCreation = elementCreation;
         this.scanner = scanner;
         this.client = client;
+        this.authorization = authorization;
         commands.put("add", new CommandAdd());
         commands.put("add_if_max", new CommandAddIfMax());
         commands.put("clear", new CommandClear());
@@ -45,9 +48,16 @@ public class ProgramProcess {
      * Asks to enter the name of the command and executes necessary command.
      */
     public void process() {
-        System.out.println();
-        System.out.println("Программа запущена в интерактивном режиме. Введите \"help\", чтобы посмотреть доступные команды");
         try {
+            System.out.println();
+            if (authorization.checkRegistration()) {
+                authorization.authorize();
+            } else {
+                authorization.register();
+            }
+            session = authorization.getSession();
+            System.out.println();
+            System.out.println("Программа запущена в интерактивном режиме. Введите \"help\", чтобы посмотреть доступные команды");
             while (true) {
                 Request request;
                 String line = scanner.nextLine().trim().toLowerCase();
@@ -60,9 +70,10 @@ public class ProgramProcess {
                             Dragon dragon;
                             if (new Command().commandName(line).equals("add") || new Command().commandName(line).equals("add_if_max")
                                     || new Command().commandName(line).equals("update") || new Command().commandName(line).equals("remove_lower")) {
-                                dragon = elementCreation.createElement();
-                                request = new Request(dragon, commands.get(new Command().commandName(line)), line);
-                            } else request = new Request(commands.get(new Command().commandName(line)), line);
+                                dragon = elementCreation.createElement(session.getUsername());
+                                request = new Request(dragon, commands.get(new Command().commandName(line)), line, session.getUsername(), session.getPassword(), true);
+                            } else
+                                request = new Request(null, commands.get(new Command().commandName(line)), line, session.getUsername(), session.getPassword(), true);
                             run(request);
                         }
                     }
@@ -85,9 +96,7 @@ public class ProgramProcess {
             client.send(request);
             Response response = client.receive();
             client.getResponse(response);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (ServerUnavailableException ex) {
+        } catch (IOException | ClassNotFoundException | ServerUnavailableException e) {
             System.out.println(ConsoleColor.ANSI_RED.getColor() + "Ошибка подкдючения к северу" + ConsoleColor.ANSI_RESET.getColor());
         }
     }

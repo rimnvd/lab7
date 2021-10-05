@@ -18,6 +18,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
     private Long id;
     private LocalDate creationDate;
     private DragonHead head;
+    private String owner;
 
     public Dragon(String name,
                   long age,
@@ -25,7 +26,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
                   Color color,
                   DragonCharacter character,
                   DragonHead head,
-                  Coordinates coordinates) {
+                  Coordinates coordinates, String owner) {
         this.name = name;
         this.age = age;
         this.creationDate = LocalDate.now();
@@ -34,6 +35,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
         this.character = character;
         this.head = head;
         this.coordinates = coordinates;
+        this.owner = owner;
     }
 
     public Dragon(String name,
@@ -41,7 +43,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
                   DragonType type,
                   Color color,
                   DragonCharacter character,
-                  Coordinates coordinates) {
+                  Coordinates coordinates, String owner) {
         this.name = name;
         this.age = age;
         this.creationDate = LocalDate.now();
@@ -49,6 +51,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
         this.type = type;
         this.character = character;
         this.coordinates = coordinates;
+        this.owner = owner;
     }
 
     public Dragon(Long id,
@@ -59,7 +62,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
                   Color color,
                   DragonCharacter character,
                   DragonHead head,
-                  Coordinates coordinates) {
+                  Coordinates coordinates, String owner) {
         this.id = id;
         this.creationDate = creationDate;
         this.name = name;
@@ -70,6 +73,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
         this.character = character;
         this.head = head;
         this.coordinates = coordinates;
+        this.owner = owner;
     }
 
     public Dragon(Long id,
@@ -79,7 +83,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
                   DragonType type,
                   Color color,
                   DragonCharacter character,
-                  Coordinates coordinates) {
+                  Coordinates coordinates, String owner) {
         this.id = id;
         this.creationDate = creationDate;
         this.name = name;
@@ -89,6 +93,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
         this.type = type;
         this.character = character;
         this.coordinates = coordinates;
+        this.owner = owner;
     }
 
     /**

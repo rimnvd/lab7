@@ -50,17 +50,13 @@ public class FileManager {
         if (System.getenv().get(envVariable) != null) {
             this.file = new File(System.getenv(envVariable));
         } else {
-            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Environment variable was FILE not found. Create environment variable and try again" + ConsoleColor.ANSI_RESET.getColor());
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Environment variable FILE was not found. Create environment variable and try again" + ConsoleColor.ANSI_RESET.getColor());
             System.exit(0);
         }
     }
 
-    /**
-     * Reads the collection from the file.
-     *
-     * @return vector - the collection from the file
-     */
-    public Vector<Dragon> readCollection() {
+
+    /*public Vector<Dragon> readCollection() {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = builder.parse(file);
@@ -109,11 +105,11 @@ public class FileManager {
             System.exit(0);
         } catch (IOException ex) {
             if (!file.exists()) {
-                logger.warn("File with the specified name was not found. Create a file and try again.");
+                logger.warn("File with the specified name was not found. Create a file and try again");
                 System.exit(0);
 
             } else if (file.exists() && !file.canRead()) {
-                logger.warn("It is impossible to read data from this file.");
+                logger.warn("It is impossible to read data from this file");
                 System.exit(0);
             }
         } catch (SAXException ex) {
@@ -123,9 +119,7 @@ public class FileManager {
         return vector;
     }
 
-    /**
-     * Clears the values of the characteristics of the dragon.
-     */
+    */
     public void clearFields() {
         name = null;
         age = 0;
@@ -373,12 +367,12 @@ public class FileManager {
     /**
      * Creates new object Dragon and adds it to collection, if it is possible, or indicates that it is impossible.
      */
-    public boolean elementCreation() {
+    public boolean elementCreation(String owner) {
         boolean checkElementCreation = true;
         if (checkNull() && checkNullHead() && checkCall()) {
-            vector.add(new Dragon(id, creationDate, name, age, type, color, character, new DragonHead(size, eyesCount), new Coordinates(x, y)));
+            vector.add(new Dragon(id, creationDate, name, age, type, color, character, new DragonHead(size, eyesCount), new Coordinates(x, y), owner));
         } else if (checkNull() && checkCall() && !checkHeadSize && !checkEyesNumber) {
-            vector.add(new Dragon(id, creationDate, name, age, type, color, character, new Coordinates(x, y)));
+            vector.add(new Dragon(id, creationDate, name, age, type, color, character, new Coordinates(x, y), owner));
         } else checkElementCreation = false;
         return checkElementCreation;
     }

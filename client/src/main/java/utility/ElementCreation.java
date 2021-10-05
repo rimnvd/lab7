@@ -21,7 +21,7 @@ public class ElementCreation {
      *
      * @return new dragon
      */
-    public Dragon createElement() {
+    public Dragon createElement(String username) {
         String name = null;
         long age = 0;
         DragonType type = null;
@@ -41,7 +41,6 @@ public class ElementCreation {
         } catch (WrongInputFormatException e) {
             System.out.println(ConsoleColor.ANSI_RED.getColor() + "\nНеверный формат данных. Повторите ввод" + ConsoleColor.ANSI_RESET.getColor());
         }
-
         x = checkX();
         y = checkY();
         if (checkDragonHead()) {
@@ -53,14 +52,14 @@ public class ElementCreation {
                     color,
                     character,
                     new data.DragonHead(size, eyesCount),
-                    new data.Coordinates(x, y));
+                    new data.Coordinates(x, y), username);
         } else {
             dragon = new Dragon(name,
                     age,
                     type,
                     color,
                     character,
-                    new data.Coordinates(x, y));
+                    new data.Coordinates(x, y), username);
         }
         return dragon;
     }
@@ -226,7 +225,7 @@ public class ElementCreation {
         return ans;
     }
 
-    public Dragon createFromScript(String[] fields) {
+    public Dragon createFromScript(String[] fields, String username) {
         try {
             DragonType type = null;
             Color color = null;
@@ -252,14 +251,14 @@ public class ElementCreation {
             Integer y = Integer.parseInt(fields[6]);
             if (fields[7].equals("") && fields[8].equals("")) {
                 if (age > 0 && name != null && color != null && type != null && character != null) {
-                    return new Dragon(name, age, type, color, character, new Coordinates(x, y));
+                    return new Dragon(name, age, type, color, character, new Coordinates(x, y), username);
                 }
             } else {
                 Integer size = Integer.parseInt(fields[7]);
                 Double eyesCount = Double.parseDouble(fields[8]);
                 long eyesCountRound = Math.round(eyesCount);
                 if (eyesCount == eyesCountRound && age > 0 && size > 0 && eyesCount > 0 && name != null && type != null && character != null) {
-                    return new Dragon(name, age, type, color, character, new DragonHead(size, eyesCount), new Coordinates(x, y));
+                    return new Dragon(name, age, type, color, character, new DragonHead(size, eyesCount), new Coordinates(x, y), username);
                 }
             }
         } catch (NumberFormatException ex) {

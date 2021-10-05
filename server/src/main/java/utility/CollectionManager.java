@@ -3,6 +3,7 @@ package utility;
 import data.Color;
 import data.Dragon;
 
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Vector;
@@ -11,31 +12,27 @@ import java.util.Vector;
  * This class is responsible for the working with the collection.
  */
 public class CollectionManager {
-    private final FileManager fileManager;
-    private LocalDate date;
+    //private final FileManager fileManager;
+    private LocalDate date = LocalDate.now();
     private Long maxId;
-    private Vector<Dragon> vector = new Vector<>(0);
+    private final Vector<Dragon> vector = new Vector<>(0);
 
-    public CollectionManager(FileManager fileManager) {
-        this.fileManager = fileManager;
-    }
 
-    /**
-     * Loads the collection from the file.
-     */
-    public void loadCollection() {
+    /*public void loadCollection() {
         vector = fileManager.readCollection();
         date = LocalDate.now();
         maxId = (fileManager.getMaxId() != null) ? fileManager.getMaxId() : 0L;
-    }
+    }*/
 
     /**
      * Determines type of this collection.
      *
      * @return type of this collection as a String
      */
-    public String collectionType() {
-        return vector.getClass().getName();
+    public synchronized String collectionType() {
+        synchronized (vector) {
+            return vector.getClass().getName();
+        }
     }
 
     /**
@@ -43,16 +40,19 @@ public class CollectionManager {
      *
      * @return the collection
      */
-    public Vector<Dragon> getCollection() {
-        return vector;
+    public synchronized Vector<Dragon> getCollection() {
+        synchronized (vector) {
+            return vector;
+        }
     }
 
     /**
      * Removes all of the elements from this collection.
      */
-    public void clear() {
-        vector.clear();
-        maxId = 0L;
+    public synchronized void clear(String owner) {
+        synchronized (vector) {
+            vector.stream().filter(dragon -> dragon.getOwner().equals(owner)).forEach(vector::remove);
+        }
     }
 
     /**
@@ -60,8 +60,10 @@ public class CollectionManager {
      *
      * @return the number of the components in this collection
      */
-    public int collectionSize() {
-        return vector.size();
+    public synchronized int collectionSize() {
+        synchronized (vector) {
+            return vector.size();
+        }
     }
 
     /**
@@ -69,22 +71,19 @@ public class CollectionManager {
      *
      * @return the creation date of this collection
      */
-    public LocalDate getDate() {
-        return date;
+    public synchronized LocalDate getDate() {
+        synchronized (vector) {
+            return date;
+        }
     }
 
     /**
      * Appends the specified element to the end of this collection.
      */
-    public boolean addToCollection(Dragon dragon) {
-        if (maxId != Long.MAX_VALUE) {
-            maxId++;
-            dragon.setId(maxId);
-            dragon.setCreationDate(LocalDate.now());
-            vector.add(dragon);
-            return true;
+    public synchronized void addToCollection(Dragon dragon, Long id) {
+        synchronized (vector) {
+            dragon.setId(id);
         }
-        return false;
     }
 
 
@@ -94,8 +93,10 @@ public class CollectionManager {
      *
      * @param id id value
      */
-    public boolean removeById(Long id) {
-        return vector.removeIf(dragon -> dragon.getId().equals(id));
+    public synchronized boolean removeById(Long id, String owner) {
+        synchronized (vector) {
+            return vector.removeIf(dragon -> dragon.getId().equals(id) && dragon.getOwner().equals(owner));
+        }
     }
 
     /**
@@ -103,8 +104,10 @@ public class CollectionManager {
      *
      * @param d the element to be compared.
      */
-    public void removeLower(Dragon d) {
-        vector.removeIf(dragon -> dragon.compareTo(d) < 0);
+    public synchronized void removeLower(Dragon d) {
+        synchronized (vector) {
+            vector.removeIf(dragon -> dragon.compareTo(d) < 0);
+        }
     }
 
     /**
@@ -112,8 +115,10 @@ public class CollectionManager {
      *
      * @return true if this vector has no components; false otherwise
      */
-    public boolean isEmpty() {
-        return vector.isEmpty();
+    public synchronized boolean isEmpty() {
+        synchronized (vector) {
+            return vector.isEmpty();
+        }
     }
 
     /**
@@ -121,8 +126,10 @@ public class CollectionManager {
      *
      * @return the maximum component of this collection
      */
-    public Dragon maxElement() {
-        return Collections.max(vector);
+    public synchronized Dragon maxElement() {
+        synchronized (vector) {
+            return Collections.max(vector);
+        }
     }
 
     /**
@@ -130,23 +137,28 @@ public class CollectionManager {
      *
      * @param idValue id value
      */
-    public boolean updateById(Long idValue, Dragon dragon) {
-        boolean checkUpdating = true;
-        for (int i = 0; i < vector.size() && checkUpdating; i++) {
-            if (vector.get(i).getId().equals(idValue)) {
-                dragon.setId(idValue);
-                vector.set(i, dragon);
-                checkUpdating = false;
+    public synchronized void updateById(Long idValue, Dragon dragon) {
+        synchronized (vector) {
+            boolean flag = true;
+            for (int i = 0; i < vector.size() && flag; i++) {
+                if (vector.get(i).getId().equals(idValue)) {
+                    dragon.setId(idValue);
+                    vector.set(i, dragon);
+                    flag = false;
+                }
             }
         }
-        return checkUpdating;
+
     }
 
     /**
      * Removes the last element from this collection.
      */
-    public void removeLast() {
-        vector.removeElementAt(vector.size() - 1);
+    public synchronized void removeLast(String owner) {
+        synchronized (vector) {
+            if (vector.get(vector.size() - 1).getOwner().equals(owner))
+            vector.removeElementAt(vector.size() - 1);
+        }
     }
 
     /**
@@ -154,23 +166,19 @@ public class CollectionManager {
      *
      * @param color color value
      */
-    public boolean removeByColor(Color color) {
-        boolean flag = false;
-        for (int i = 0; i < vector.size() && !flag; i++) {
-            if (vector.get(i).getColor().equals(color)) {
-                vector.removeElementAt(i);
-                flag = true;
+    public synchronized boolean removeByColor(Color color, String owner) {
+        synchronized (vector) {
+            boolean flag = false;
+            for (int i = 0; i < vector.size() && !flag; i++) {
+                if (vector.get(i).getColor().equals(color) && vector.get(i).getOwner().equals(owner)) {
+                    vector.removeElementAt(i);
+                    flag = true;
+                }
             }
+            return flag;
         }
-        return flag;
     }
 
-    /**
-     * Saves this collection to the file.
-     */
-    public void saveToFile() {
-        fileManager.writeCollection(vector);
-    }
 
 
 }

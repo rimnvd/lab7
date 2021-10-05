@@ -24,12 +24,13 @@ public class CommandShow extends Command {
      *
      * @param enteredCommand the full name of the entered command
      */
-    public Response execute(String enteredCommand, Dragon dragon) {
+    @Override
+    public Response execute(String enteredCommand, Dragon dragon, String username) {
         if (collectionManager.isEmpty()) {
-            return new Response(CommandCode.DEFAULT, "Коллекция пуста");
+            return new Response(ResultCode.DEFAULT, "Коллекция пуста");
         }
         ArrayList<String> result = collectionManager.getCollection().stream()
                 .sorted().collect(ArrayList::new, (list, drag) -> list.add(drag.toString()), ArrayList::addAll);
-        return new Response(CommandCode.DEFAULT, result);
+        return new Response(ResultCode.DEFAULT, result);
     }
 }

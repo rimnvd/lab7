@@ -1,6 +1,6 @@
 package utility;
 
-import commands.CommandCode;
+import commands.ResultCode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,23 +9,23 @@ import java.util.ArrayList;
 public class Response implements Serializable {
     private static final long serialVersionUID = 31L;
     private String message;
-    private CommandCode commandCode;
+    private ResultCode resultCode;
     private ArrayList<String> result;
 
-    public Response(CommandCode commandCode, String message) {
+    public Response(ResultCode resultCode, String message) {
         this.message = message;
-        this.commandCode = commandCode;
+        this.resultCode = resultCode;
         this.result = null;
     }
 
-    public Response(CommandCode commandCode) {
-        this.commandCode = commandCode;
+    public Response(ResultCode resultCode) {
+        this.resultCode = resultCode;
         this.message = "";
         this.result = null;
     }
 
-    public Response(CommandCode commandCode, ArrayList<String> result) {
-        this.commandCode = commandCode;
+    public Response(ResultCode resultCode, ArrayList<String> result) {
+        this.resultCode = resultCode;
         this.result = result;
         this.message = "";
     }
@@ -38,7 +38,7 @@ public class Response implements Serializable {
         return message;
     }
 
-    public CommandCode getCommandCode() {
-        return commandCode;
+    public ResultCode getCommandCode() {
+        return resultCode;
     }
 }

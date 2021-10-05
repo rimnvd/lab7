@@ -1,6 +1,6 @@
 package utility;
 
-import commands.CommandCode;
+import commands.ResultCode;
 import exceptions.ServerUnavailableException;
 
 import java.io.*;
@@ -74,13 +74,14 @@ public class Client {
     }
 
     public void getResponse(Response response) {
-        if (response.getCommandCode() == CommandCode.ERROR) {
+        if (response.getResultCode() == ResultCode.ERROR) {
             System.out.println(ConsoleColor.ANSI_RED.getColor() + response.getMessage() + ConsoleColor.ANSI_RESET.getColor());
-        } else if (response.getCommandCode() == CommandCode.DEFAULT) {
+        } else if (response.getResultCode() == ResultCode.DEFAULT) {
             if (response.getResult() != null) {
                 response.getResult().forEach(System.out::println);
             } else if (!response.getMessage().equals("")) System.out.println(response.getMessage());
-        } else
+        } else {
             System.out.println(ConsoleColor.ANSI_GREEN.getColor() + response.getMessage() + ConsoleColor.ANSI_RESET.getColor());
+        }
     }
 }

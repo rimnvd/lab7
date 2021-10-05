@@ -27,12 +27,12 @@ public class CommandInfo extends Command {
      * @return true if data is correct; false otherwise
      */
     @Override
-    public Response execute(String enteredCommand, Dragon dragon) {
+    public Response execute(String enteredCommand, Dragon dragon, String username) {
         ArrayList<String> result = new ArrayList<>();
         result.add("Тип коллекции: " + collectionManager.collectionType());
         result.add("Дата инициализации коллекции: " + collectionManager.getDate());
         result.add("Количество элементов коллекции: " + collectionManager.collectionSize());
-        return new Response(CommandCode.DEFAULT, result);
+        return new Response(ResultCode.DEFAULT, result);
     }
 }
 

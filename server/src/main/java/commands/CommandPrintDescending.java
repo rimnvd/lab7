@@ -26,13 +26,13 @@ public class CommandPrintDescending extends Command {
      * @param enteredCommand the name of the specified command
      */
     @Override
-    public Response execute(String enteredCommand, Dragon dragon) {
+    public Response execute(String enteredCommand, Dragon dragon, String username) {
         if (collectionManager.isEmpty()) {
-            return new Response(CommandCode.DEFAULT, "Коллекция пуста");
+            return new Response(ResultCode.DEFAULT, "Коллекция пуста");
         }
         ArrayList<String> result = collectionManager.getCollection().stream()
                 .sorted(Comparator.reverseOrder())
                 .collect(ArrayList::new, (list, drag) -> list.add("Dragon " + drag.getName()), ArrayList::addAll);
-        return new Response(CommandCode.DEFAULT, result);
+        return new Response(ResultCode.DEFAULT, result);
     }
 }

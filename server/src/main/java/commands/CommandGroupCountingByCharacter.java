@@ -28,12 +28,12 @@ public class CommandGroupCountingByCharacter extends Command {
      * @param enteredCommand the full name of the entered command
      */
     @Override
-    public Response execute(String enteredCommand, Dragon dragon) {
-        if (collectionManager.isEmpty()) return new Response(CommandCode.DEFAULT, "Коллекция пуста");
+    public Response execute(String enteredCommand, Dragon dragon, String username) {
+        if (collectionManager.isEmpty()) return new Response(ResultCode.DEFAULT, "Коллекция пуста");
         ArrayList<String> result = collectionManager.getCollection().stream()
                 .collect(Collectors.groupingBy(Dragon::getCharacter, Collectors.counting()))
                 .entrySet().stream().collect(ArrayList::new, (list, es) -> list.add(es.getKey() + ": " + es.getValue()), ArrayList::addAll);
-        return new Response(CommandCode.DEFAULT, result);
+        return new Response(ResultCode.DEFAULT, result);
     }
 
 

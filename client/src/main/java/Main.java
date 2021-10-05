@@ -1,7 +1,4 @@
-import utility.Client;
-import utility.ConsoleColor;
-import utility.ElementCreation;
-import utility.ProgramProcess;
+import utility.*;
 
 import java.util.Scanner;
 
@@ -33,7 +30,8 @@ public class Main {
             }
         }
         Client client = new Client(ip, port);
-        ProgramProcess programProcess = new ProgramProcess(elementCreation, scanner, client);
+        Authorization authorization = new Authorization(scanner, client);
+        ProgramProcess programProcess = new ProgramProcess(elementCreation, scanner, client, authorization);
         programProcess.process();
     }
 }

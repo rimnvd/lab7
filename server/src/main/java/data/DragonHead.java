@@ -15,6 +15,12 @@ public class DragonHead implements Serializable {
         this.size = size;
     }
 
+    public DragonHead(Double eyesCount) {
+        this.eyesCount = eyesCount;
+        this.size = null;
+
+    }
+
     /**
      * @return The amount of the eyes of the dragon.
      */
