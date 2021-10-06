@@ -11,8 +11,8 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 
 public class ResponseSender implements Runnable {
-    private Response response;
-    private Socket socket;
+    private final Response response;
+    private final Socket socket;
     public static final Logger logger = LoggerFactory.getLogger(Server.class);
 
     public ResponseSender(Response response, Socket socket) {
