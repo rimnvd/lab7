@@ -18,7 +18,7 @@ public class Server {
     public static final Logger logger = LoggerFactory.getLogger(Server.class);
     private final ConnectionAccepter connectionAccepter;
     private final RequestHandler requestHandler;
-    private final ForkJoinPool processThread = new ForkJoinPool();
+    private final ForkJoinPool processThread = new ForkJoinPool(Runtime.getRuntime().availableProcessors() / 3);
     private final ExecutorService sendThread = Executors.newCachedThreadPool();
 
 

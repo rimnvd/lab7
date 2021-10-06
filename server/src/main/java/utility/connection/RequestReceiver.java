@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
-public class RequestReceiver extends Thread {
+public class RequestReceiver implements Runnable {
     public static final Logger logger = LoggerFactory.getLogger(Server.class);
     private final ProcessingRequest processingRequest;
     private final Socket socket;
