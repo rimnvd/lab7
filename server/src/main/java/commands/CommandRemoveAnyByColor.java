@@ -5,6 +5,10 @@ import data.Dragon;
 import utility.CollectionManager;
 import utility.Response;
 import utility.database.DataBaseCollectionManager;
+import utility.database.NoColorException;
+import utility.database.NoPermissionException;
+
+import java.sql.SQLException;
 
 /**
  * This class is responsible for the removing one element from the the collection, color of which
@@ -30,12 +34,21 @@ public class CommandRemoveAnyByColor extends Command {
     public Response execute(String enteredCommand, Dragon dragon, String username) {
         if (collectionManager.isEmpty()) {
             return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду, так как коллекция пуста");
-        } else if (dbCollectionManager.removeByColor(username, Color.valueOf(argument(enteredCommand).toUpperCase()))) {
-            if (collectionManager.removeByColor(Color.valueOf(argument(enteredCommand).toUpperCase()), username))
+        } else {
+            try {
+                dbCollectionManager.removeByColor(username, Color.valueOf(argument(enteredCommand).toUpperCase()));
+                collectionManager.removeByColor(Color.valueOf(argument(enteredCommand).toUpperCase()), username);
+                dbCollectionManager.restartSequence(collectionManager);
                 return new Response(ResultCode.CHANGE, "Элемент успешно удален из коллекции");
-            else
-                return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду, так как в коллекции нет элемента с таким полем Color");
+            } catch (SQLException e) {
+                return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду");
+            } catch (NoColorException e) {
+                return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду, " +
+                        "так как в коллекции нет элемента с таким полем Color");
+            } catch (NoPermissionException e) {
+               return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду, " +
+                       "так как у вас нет доступа ни к одному элементу с таким полем Color");
+            }
         }
-        return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду");
     }
 }

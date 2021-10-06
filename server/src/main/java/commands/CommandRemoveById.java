@@ -34,6 +34,7 @@ public class CommandRemoveById extends Command {
             try {
                 dbCollectionManager.removeById(username, id);
                 collectionManager.removeById(Long.parseLong(argument(enteredCommand)), username);
+                dbCollectionManager.restartSequence(collectionManager);
                 return new Response(ResultCode.CHANGE, "Элемент успешно удален из коллекции");
             } catch (NoPermissionException e) {
                 return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду, так как у вас нет доступа к элементу с id = " + id);

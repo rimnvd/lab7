@@ -51,7 +51,7 @@ public class RequestHandler {
             }
         } else if (request.getCommandName() == null && request.getIsRegister()) {
             try {
-                if (dataBaseUserManager.signIn(request.getUsername(), request.getPassword())) {
+                if (dataBaseUserManager.checkUser(request.getUsername(), request.getPassword())) {
                     logger.info("User {} has authorized", request.getUsername());
                     return new Response(ResultCode.OK);
                 } else return new Response(ResultCode.WRONG);
@@ -74,11 +74,22 @@ public class RequestHandler {
                 logger.warn("Hashing algorithm was not found");
                 return new Response(ResultCode.DBERROR);
             }
+        } else {
+            try {
+                if (request.getCommandName() != null && dataBaseUserManager.checkUser(request.getUsername(), request.getPassword())) {
+                    logger.info("Command {} has executed", request.getCommandName().getName());
+                    return commands.get(request.getCommandName().getName()).execute(request.getFullCommand(), request.getDragon(), request.getUsername());
+                }
+            } catch (SQLException ex) {
+                logger.warn("Problems with DB");
+                return new Response(ResultCode.DBERROR);
+            } catch (NoSuchAlgorithmException ex) {
+                logger.warn("Hashing algorithm was not found");
+                return new Response(ResultCode.DBERROR);
+            }
         }
-        logger.info("Command {} has executed", request.getCommandName().getName());
-        return commands.get(request.getCommandName().getName()).execute(request.getFullCommand(), request.getDragon(), request.getUsername());
+        return new Response(ResultCode.NOTFOUND, "Невозможно выполнить данную команду, " +
+                "так как пользователь с таким именем и паролем не найден");
     }
-
-
 }
 

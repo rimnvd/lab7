@@ -1,5 +1,4 @@
 package utility.connection;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utility.Request;
@@ -11,23 +10,21 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
 public class RequestReceiver extends Thread {
-    private Request request;
-    private final ConnectionAccepter connectionAccepter;
     public static final Logger logger = LoggerFactory.getLogger(Server.class);
-    private ProcessingRequest processingRequest;
+    private final ProcessingRequest processingRequest;
+    private final Socket socket;
 
-    public RequestReceiver(ConnectionAccepter connectionAccepter, RequestHandler requestHandler, ForkJoinPool processThreads,
-                           ExecutorService sendThreads) {
-        this.connectionAccepter = connectionAccepter;
+    public RequestReceiver(RequestHandler requestHandler, ForkJoinPool processThreads,
+                           ExecutorService sendThreads, Socket socket) {
         this.processingRequest= new ProcessingRequest(requestHandler, processThreads, sendThreads);
+        this.socket = socket;
     }
 
     @Override
     public void run() {
         try {
-            Socket socket = connectionAccepter.getSocket();
             ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
-            request = (Request) objectInputStream.readObject();
+            Request request = (Request) objectInputStream.readObject();
             logger.info("Request has received");
             processingRequest.process(request, socket);
         } catch (IOException ex) {

@@ -27,7 +27,7 @@ public class CommandExecuteScript extends Command {
 
 
     @Override
-    public boolean execute(String enteredCommand) {
+    public boolean execute(String enteredCommand, String username) {
         if (checkCommand(enteredCommand)) {
             File file = new File(argument(enteredCommand));
             if (file.exists() && !file.canRead()) {
@@ -53,7 +53,7 @@ public class CommandExecuteScript extends Command {
                             if (fullCommandName.equals("add")) {
                                 System.out.println(fullCommandName);
                                 System.out.println();
-                                Dragon dragon = programProcess.getCommands().get("add").execute(fieldValues(reader), elementCreation);
+                                Dragon dragon = programProcess.getCommands().get("add").execute(fieldValues(reader), elementCreation, username);
                                 if (dragon != null) {
                                     programProcess.run(new Request(dragon, programProcess.getCommands().get("add"), fullCommandName, null, null, true));
                                 } else {
@@ -63,7 +63,7 @@ public class CommandExecuteScript extends Command {
                             } else if (fullCommandName.equals("add_if_max")) {
                                 System.out.println(fullCommandName);
                                 System.out.println();
-                                Dragon dragon = programProcess.getCommands().get("add_if_max").execute(fieldValues(reader), elementCreation);
+                                Dragon dragon = programProcess.getCommands().get("add_if_max").execute(fieldValues(reader), elementCreation, username);
                                 if (dragon != null) {
                                     programProcess.run(new Request(dragon, programProcess.getCommands().get("add"), fullCommandName, null, null, true));
                                 } else {
@@ -78,7 +78,7 @@ public class CommandExecuteScript extends Command {
                                     if (id <= 0) {
                                         System.out.println(ConsoleColor.ANSI_RED.getColor() + "Команда " + fullCommandName + " не найдена" + ConsoleColor.ANSI_RESET.getColor());
                                     } else {
-                                        Dragon dragon = programProcess.getCommands().get("update").execute(fieldValues(reader), elementCreation);
+                                        Dragon dragon = programProcess.getCommands().get("update").execute(fieldValues(reader), elementCreation, username);
                                         if (dragon != null) {
                                             programProcess.run(new Request(dragon, programProcess.getCommands().get("update"), fullCommandName, null, null, true));
                                         } else {
@@ -93,7 +93,7 @@ public class CommandExecuteScript extends Command {
                             } else if (new Command().commandName(fullCommandName).equals("remove_lower")) {
                                 System.out.println(fullCommandName);
                                 System.out.println();
-                                Dragon dragon = programProcess.getCommands().get("remove_lower").execute(fieldValues(reader), elementCreation);
+                                Dragon dragon = programProcess.getCommands().get("remove_lower").execute(fieldValues(reader), elementCreation, username);
                                 if (dragon != null) {
                                     programProcess.run(new Request(dragon, programProcess.getCommands().get("remove_lower"), fullCommandName, null, null, true));
                                 } else {

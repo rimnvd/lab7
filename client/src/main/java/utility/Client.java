@@ -80,7 +80,8 @@ public class Client {
             if (response.getResult() != null) {
                 response.getResult().forEach(System.out::println);
             } else if (!response.getMessage().equals("")) System.out.println(response.getMessage());
-        } else {
+        } else if (response.getResultCode() == ResultCode.NOTFOUND) System.out.println(ConsoleColor.ANSI_GREEN.getColor() + response.getMessage() + ConsoleColor.ANSI_RESET.getColor());
+        else {
             System.out.println(ConsoleColor.ANSI_GREEN.getColor() + response.getMessage() + ConsoleColor.ANSI_RESET.getColor());
         }
     }

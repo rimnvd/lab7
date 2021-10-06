@@ -37,8 +37,9 @@ public class CommandRemoveLast extends Command {
         } else {
             Long id = collectionManager.getCollection().get(collectionManager.getCollection().size() - 1).getId();
             try {
-                dbCollectionManager.removeLast(username);
+                dbCollectionManager.removeLast(username, collectionManager);
                 collectionManager.removeLast(username);
+                dbCollectionManager.restartSequence(collectionManager);
                 return new Response(ResultCode.CHANGE, "Элемент успешно удален из коллекции");
             } catch (NoPermissionException e) {
                 return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду, так как у вас нет доступа к элементу с id = " + id);

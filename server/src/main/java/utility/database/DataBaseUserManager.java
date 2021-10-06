@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class DataBaseUserManager {
 
-    private Connection connection;
+    private final Connection connection;
 
     public DataBaseUserManager (DataBaseConnection dataBaseConnection) {
         this.connection = dataBaseConnection.getConnection();
@@ -31,14 +31,13 @@ public class DataBaseUserManager {
         preparedStatement.close();
     }
 
-    public boolean signIn(String username, String password) throws SQLException, NoSuchAlgorithmException {
+    public boolean checkUser(String username, String password) throws SQLException, NoSuchAlgorithmException {
         if (!isUserExist(username)) return false;
-        PreparedStatement signIn = connection.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
-        signIn.setString(1, username);
-        signIn.setBytes(2, getHash(password));
-        return signIn.executeQuery().next();
+        PreparedStatement checkUser = connection.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
+        checkUser.setString(1, username);
+        checkUser.setBytes(2, getHash(password));
+        return checkUser.executeQuery().next();
     }
-
 
 
     public byte[] getHash(String password) throws NoSuchAlgorithmException {

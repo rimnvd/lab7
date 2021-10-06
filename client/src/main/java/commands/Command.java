@@ -30,6 +30,7 @@ public class Command implements Serializable {
         return true;
     }
 
+
     /**
      * Checks whether the name of the entered command is right or not.
      *
@@ -62,8 +63,12 @@ public class Command implements Serializable {
         } else return enteredCommand.substring(0, enteredCommand.indexOf(" "));
     }
 
-    public Dragon execute(String[] fields, ElementCreation elementCreation) {
+    public Dragon execute(String[] fields, ElementCreation elementCreation, String username) {
         return null;
+    }
+
+    public boolean execute(String enteredCommand, String username) {
+        return true;
     }
 
 

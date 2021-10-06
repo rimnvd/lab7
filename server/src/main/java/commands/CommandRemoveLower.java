@@ -4,7 +4,6 @@ import data.Dragon;
 import utility.CollectionManager;
 import utility.Response;
 import utility.database.DataBaseCollectionManager;
-import utility.database.DataBaseUserManager;
 import utility.database.NoIdException;
 import utility.database.NoPermissionException;
 
@@ -40,13 +39,14 @@ public class CommandRemoveLower extends Command {
                     try {
                         dbCollectionManager.removeById(username, dragons.getId());
                     } catch (NoPermissionException | NoIdException e) {
-                        e.printStackTrace();
+                        if (e.getMessage() != null) System.out.println(e.getMessage());
                     } catch (SQLException e) {
                         return new Response(ResultCode.ERROR, "Невозможно выполнить данную команду");
                     }
                 }
             }
-            collectionManager.removeLower(dragon);
+            collectionManager.removeLower(dragon, username);
+            dbCollectionManager.restartSequence(collectionManager);
         }
         return new Response(ResultCode.DEFAULT);
     }

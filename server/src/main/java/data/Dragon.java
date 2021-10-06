@@ -36,6 +36,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
         this.head = head;
         this.coordinates = coordinates;
         this.owner = owner;
+
     }
 
     public Dragon(String name,
@@ -52,6 +53,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
         this.character = character;
         this.coordinates = coordinates;
         this.owner = owner;
+        this.head = null;
     }
 
     public Dragon(Long id,
@@ -92,6 +94,7 @@ public class Dragon implements Comparable<Dragon>, Serializable {
         this.character = character;
         this.coordinates = coordinates;
         this.owner = owner;
+        this.head = null;
     }
 
     /**

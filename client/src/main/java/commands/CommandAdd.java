@@ -26,8 +26,8 @@ public class CommandAdd extends Command {
     }
 
     @Override
-    public Dragon execute(String[] fields, ElementCreation elementCreation) {
-        return elementCreation.createFromScript(fields);
+    public Dragon execute(String[] fields, ElementCreation elementCreation, String username) {
+        return elementCreation.createFromScript(fields, username);
     }
 
 }

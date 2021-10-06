@@ -1,6 +1,7 @@
 package utility.database;
 
 import data.*;
+import utility.CollectionManager;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -12,13 +13,14 @@ public class DataBaseCollectionManager {
 
     public DataBaseCollectionManager(DataBaseConnection dataBaseConnection) {
         this.connection = dataBaseConnection.getConnection();
+
     }
 
     public Dragon getDragonFromDB(ResultSet resultSet) throws SQLException {
         long id = resultSet.getLong("id");
         String name = resultSet.getString("name");
         LocalDate creationDate = resultSet.getDate("creation_date").toLocalDate();
-        int age = resultSet.getInt("age");
+        long age = resultSet.getLong("age");
         Color color = Color.valueOf(resultSet.getString("color").toUpperCase());
         DragonType type = DragonType.valueOf(resultSet.getString("dragon_type").toUpperCase());
         DragonCharacter character = DragonCharacter.valueOf(resultSet.getString("dragon_character").toUpperCase());
@@ -61,6 +63,7 @@ public class DataBaseCollectionManager {
         delete.executeUpdate();
     }
 
+
     public Long insertDragon(Dragon dragon, String username) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO dragons values (nextval('id_sequence'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -93,7 +96,7 @@ public class DataBaseCollectionManager {
         preparedStatement.setLong(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (!resultSet.next()) throw new NoIdException();
-        if (!resultSet.getString("username").equals(username)) throw new NoPermissionException();
+        if (!resultSet.getString("owner").equals(username)) throw new NoPermissionException();
     }
 
     public void setDragon(PreparedStatement preparedStatement, Dragon dragon) throws SQLException {
@@ -105,39 +108,52 @@ public class DataBaseCollectionManager {
         preparedStatement.setString(6, dragon.getColor().toString());
         preparedStatement.setString(7, dragon.getType().toString());
         preparedStatement.setString(8, dragon.getCharacter().toString());
-        preparedStatement.setInt(9, dragon.getHead().getSize() != null ? dragon.getHead().getSize() : Types.NULL);
-        preparedStatement.setDouble(10, dragon.getHead().getEyesCount() != null ? dragon.getHead().getEyesCount() : Types.NULL);
-    }
-
-    public boolean removeByColor(String username, Color color) {
-        try {
-            PreparedStatement chooseDragons = connection.prepareStatement("SELECT * from dragons where color = ? AND owner = ?");
-            chooseDragons.setString(1, color.toString());
-            chooseDragons.setString(2, username);
-            ResultSet resultSet = chooseDragons.executeQuery();
-            Long firstId = resultSet.getLong("id");
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM dragons WHERE id = ?");
-            preparedStatement.setLong(1, firstId);
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+        if (dragon.getHead() != null) {
+            preparedStatement.setInt(9, dragon.getHead().getSize() != null ? dragon.getHead().getSize() : Types.NULL);
+            preparedStatement.setDouble(10, dragon.getHead().getEyesCount() != null ? dragon.getHead().getEyesCount() : Types.NULL);
         }
+
     }
 
-    public void removeLast(String username) throws NoPermissionException, SQLException {
-        PreparedStatement lastId = connection.prepareStatement("SELECT last_value from id_sequence");
-        ResultSet resultId = lastId.executeQuery();
+    public void removeByColor(String username, Color color) throws SQLException, NoColorException, NoPermissionException {
+        PreparedStatement checkColor = connection.prepareStatement("SELECT * FROM dragons where color = ?");
+        checkColor.setString(1, color.toString());
+        if (checkColor.executeQuery().next()) {
+            PreparedStatement chooseDragon = connection.prepareStatement("SELECT * from dragons where color = ? AND owner = ?");
+            chooseDragon.setString(1, color.toString());
+            chooseDragon.setString(2, username);
+            ResultSet resultSet = chooseDragon.executeQuery();
+            if (resultSet.next()) {
+                Long firstId = resultSet.getLong("id");
+                PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM dragons WHERE id = ?");
+                preparedStatement.setLong(1, firstId);
+                preparedStatement.executeUpdate();
+            } else throw new NoPermissionException();
+        } else throw new NoColorException();
+
+
+    }
+
+    public void removeLast(String username, CollectionManager collectionManager) throws NoPermissionException, SQLException {
+        Long lastId = collectionManager.getLastId();
         PreparedStatement chooseDragon = connection.prepareStatement("SELECT * FROM dragons where id = ?");
-        chooseDragon.setLong(1, resultId.getLong("last_value"));
+        chooseDragon.setLong(1, lastId);
         ResultSet dragon = chooseDragon.executeQuery();
+        dragon.next();
         if (!dragon.getString("owner").equals(username)) throw new NoPermissionException();
         PreparedStatement delete = connection.prepareStatement("DELETE FROM dragons WHERE id = ?");
-        delete.setLong(1, resultId.getLong("last_value"));
+        delete.setLong(1, lastId);
         delete.executeUpdate();
     }
 
+    public void restartSequence(CollectionManager collectionManager) {
+        try {
+            Statement restart = connection.createStatement();
+            restart.executeUpdate("ALTER SEQUENCE IF EXISTS id_sequence RESTART WITH " + collectionManager.getLastId() + 1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 
