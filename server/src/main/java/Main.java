@@ -37,11 +37,10 @@ public class Main {
             } catch (IOException ex) {
                 System.out.println(ConsoleColor.ANSI_RED.getColor() + "IOException has happened. " + ex.getMessage() + ConsoleColor.ANSI_RESET.getColor());
             } catch (ExitException ex) {
-                System.out.println("the end");
+                System.out.println("Server shutdown");
             } catch (SQLException ex) {
                 System.out.println("Cannot connect to database");
-                ex.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (ClassNotFoundException ex) {
                 System.out.println("Driver for postgreSQL was not found");
             }
         }

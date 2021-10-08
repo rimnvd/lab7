@@ -16,7 +16,6 @@ public class DataBaseConnection {
             checkVariables();
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(url, login, password);
-            System.out.println("");
     }
 
     public void checkVariables() {
@@ -25,7 +24,7 @@ public class DataBaseConnection {
             throw new ExitException();
         }
         if (System.getenv().get("LOGIN") == null) {
-            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Environment variable USERNAME was not found" + ConsoleColor.ANSI_RESET.getColor());
+            System.out.println(ConsoleColor.ANSI_RED.getColor() + "Environment variable LOGIN was not found" + ConsoleColor.ANSI_RESET.getColor());
             throw new ExitException();
         }
         if (System.getenv().get("PASSWORD") == null) {

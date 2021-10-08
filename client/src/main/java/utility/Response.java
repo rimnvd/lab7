@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class Response implements Serializable {
     private static final long serialVersionUID = 31L;
-    private String message;
-    private ResultCode resultCode;
-    private ArrayList<String> result;
+    private final String message;
+    private final ResultCode resultCode;
+    private final ArrayList<String> result;
 
     public Response(ResultCode resultCode, String message) {
         this.message = message;
