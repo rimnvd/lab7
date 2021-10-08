@@ -26,10 +26,10 @@ public class DataBaseCollectionManager {
         DragonCharacter character = DragonCharacter.valueOf(resultSet.getString("dragon_character").toUpperCase());
         Integer x = resultSet.getInt("x_coordinate");
         Integer y = resultSet.getInt("y_coordinate");
-        DragonHead head;
-        Double eyesCount = resultSet.getDouble("eyes_count");
-        if (resultSet.getInt("size") == 0) head = new DragonHead(eyesCount);
-        else head = new DragonHead(resultSet.getInt("size"), eyesCount);
+        DragonHead head = null;
+        if (resultSet.getInt("size") == 0) {
+            if (resultSet.getDouble("eyes_count") != 0) head = new DragonHead(resultSet.getDouble("eyes_count"));
+        } else head = new DragonHead(resultSet.getInt("size"), resultSet.getDouble("eyes_count"));
         Coordinates coordinates = new Coordinates(x, y);
         String owner = resultSet.getString("owner");
         return new Dragon(id, creationDate, name, age, type, color, character, head, coordinates, owner);
@@ -110,7 +110,10 @@ public class DataBaseCollectionManager {
         preparedStatement.setString(8, dragon.getCharacter().toString());
         if (dragon.getHead() != null) {
             preparedStatement.setInt(9, dragon.getHead().getSize() != null ? dragon.getHead().getSize() : Types.NULL);
-            preparedStatement.setDouble(10, dragon.getHead().getEyesCount() != null ? dragon.getHead().getEyesCount() : Types.NULL);
+            preparedStatement.setDouble(10, dragon.getHead().getEyesCount());
+        } else {
+            preparedStatement.setInt(9, Types.NULL);
+            preparedStatement.setDouble(10, Types.NULL);
         }
 
     }

@@ -67,7 +67,7 @@ public class Command implements Serializable {
         return null;
     }
 
-    public boolean execute(String enteredCommand, String username) {
+    public boolean execute(String enteredCommand, String username, String password) {
         return true;
     }
 

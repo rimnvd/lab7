@@ -1,11 +1,10 @@
-package utility;
+package utility.database;
 
 import java.io.Serializable;
 
 public class Session implements Serializable {
     private final String username;
     private final String password;
-    private boolean isAuthorized;
 
     public Session(String username, String password) {
         this.username = username;
@@ -20,11 +19,4 @@ public class Session implements Serializable {
         return password;
     }
 
-    public void setAuthorized(boolean isAuthorized) {
-        this.isAuthorized = isAuthorized;
-    }
-
-    public boolean isAuthorized() {
-        return isAuthorized;
-    }
 }

@@ -124,6 +124,7 @@ public class ElementCreation {
 
     public Integer checkSize() throws NumberFormatException {
         FieldChecker<Integer> fieldChecker = str -> {
+            if (str == null) return null;
             Integer result = Integer.parseInt(str);
             if (result <= 0) {
                 throw new NumberFormatException();

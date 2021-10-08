@@ -1,4 +1,5 @@
 import utility.*;
+import utility.database.Authorization;
 
 import java.util.Scanner;
 

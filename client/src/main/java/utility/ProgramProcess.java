@@ -3,6 +3,8 @@ package utility;
 import commands.*;
 import data.Dragon;
 import exceptions.ServerUnavailableException;
+import utility.database.Authorization;
+import utility.database.Session;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,7 +65,7 @@ public class ProgramProcess {
                 System.out.println();
                 if (commands.containsKey(new Command().commandName(line))) {
                     if (new Command().commandName(line).equals("execute_script")) {
-                        commands.get(new Command().commandName(line)).execute(line);
+                        commands.get(new Command().commandName(line)).execute(line, session.getUsername(), session.getPassword());
                     } else {
                         if (commands.get(new Command().commandName(line)).execute(line)) {
                             Dragon dragon;

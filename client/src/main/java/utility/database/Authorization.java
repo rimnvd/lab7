@@ -1,8 +1,9 @@
-package utility;
+package utility.database;
 
 
 import commands.ResultCode;
 import exceptions.ServerUnavailableException;
+import utility.*;
 
 import java.io.Console;
 import java.io.IOException;
