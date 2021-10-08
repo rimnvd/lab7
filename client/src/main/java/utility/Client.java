@@ -6,6 +6,7 @@ import exceptions.ServerUnavailableException;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.UnresolvedAddressException;
@@ -53,7 +54,7 @@ public class Client {
         do {
             channel.read(buffer);
         } while (buffer.hasRemaining());
-        buffer.flip();
+        ((Buffer)buffer).flip();
         buffer = ByteBuffer.allocate(buffer.getInt());
 
         while (buffer.hasRemaining()) {
@@ -74,14 +75,14 @@ public class Client {
     }
 
     public void getResponse(Response response) {
-        if (response.getResultCode() == ResultCode.ERROR) {
+        if (response.getResultCode() == ResultCode.ERROR || response.getResultCode() == ResultCode.DBERROR
+                || response.getResultCode() == ResultCode.NOTFOUND) {
             System.out.println(ConsoleColor.ANSI_RED.getColor() + response.getMessage() + ConsoleColor.ANSI_RESET.getColor());
         } else if (response.getResultCode() == ResultCode.DEFAULT) {
             if (response.getResult() != null) {
                 response.getResult().forEach(System.out::println);
             } else if (!response.getMessage().equals("")) System.out.println(response.getMessage());
-        } else if (response.getResultCode() == ResultCode.NOTFOUND) System.out.println(ConsoleColor.ANSI_GREEN.getColor() + response.getMessage() + ConsoleColor.ANSI_RESET.getColor());
-        else {
+        } else {
             System.out.println(ConsoleColor.ANSI_GREEN.getColor() + response.getMessage() + ConsoleColor.ANSI_RESET.getColor());
         }
     }

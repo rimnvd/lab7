@@ -1,9 +1,14 @@
 package commands;
 
 import data.Dragon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utility.CollectionManager;
 import utility.Response;
+import utility.connection.Server;
 import utility.database.DataBaseCollectionManager;
+
+import java.sql.SQLException;
 
 
 /**
@@ -14,6 +19,7 @@ public class CommandAddIfMax extends Command {
     private static final long serialVersionUID = 2L;
     private final CollectionManager collectionManager;
     private final DataBaseCollectionManager dbCollectionManager;
+    public static final Logger logger = LoggerFactory.getLogger(Server.class);
 
     public CommandAddIfMax(CollectionManager collectionManager, DataBaseCollectionManager dbCollectionManager) {
         super("add_if_max");
@@ -28,21 +34,23 @@ public class CommandAddIfMax extends Command {
      */
     @Override
     public Response execute(String enteredCommand, Dragon dragon, String username) {
-        if (collectionManager.isEmpty()) {
-            Long newId = dbCollectionManager.insertDragon(dragon, username);
-            if (newId != null) {
-                collectionManager.addToCollection(dragon, newId);
-                return new Response(ResultCode.CHANGE, "Элемент успешно добавлен в коллекцию");
+        try {
+            if (collectionManager.isEmpty()) {
+                Long newId = dbCollectionManager.insertDragon(dragon, username);
+                    collectionManager.addToCollection(dragon, newId);
+                    return new Response(ResultCode.CHANGE, "Элемент успешно добавлен в коллекцию");
+            } else if (dragon.compareTo(collectionManager.maxElement()) > 0) {
+                Long newId = dbCollectionManager.insertDragon(dragon, username);
+                    collectionManager.addToCollection(dragon, newId);
+                    return new Response(ResultCode.CHANGE, "Элемент успешно добавлен в коллекцию");
             }
-            else return new Response(ResultCode.ERROR, "Элемент не может быть добавлен в коллекцию");
-        } else if (dragon.compareTo(collectionManager.maxElement()) > 0) {
-            Long newId = dbCollectionManager.insertDragon(dragon, username);
-            if (newId != null) {
-                collectionManager.addToCollection(dragon, newId);
-                return new Response(ResultCode.CHANGE, "Элемент успешно добавлен в коллекцию");
-            } else return new Response(ResultCode.ERROR, "Элемент не может быть добавлен в коллекцию");
+            return new Response(ResultCode.DEFAULT);
+        } catch (SQLException ex) {
+            logger.warn("Problems with database");
+            return new Response(ResultCode.DBERROR, "Невозможно выполнить данную команду, " +
+                    "так как произошла ошибка при работе с базой данных");
         }
-        return new Response(ResultCode.DEFAULT);
+
     }
 
 }

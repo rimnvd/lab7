@@ -3,6 +3,7 @@ package utility.database;
 
 import commands.ResultCode;
 import exceptions.ServerUnavailableException;
+import org.w3c.dom.ls.LSOutput;
 import utility.*;
 
 import java.io.Console;
@@ -32,17 +33,17 @@ public class Authorization {
 
     public String inputPassword() {
         System.out.println("Введите пароль:");
-        String password = "";
-        while (password.isEmpty()) {
+        String password;
+        while (true) {
             Console console = System.console();
             if (console != null) {
                 char[] symbols = console.readPassword();
-                if (symbols == null) continue;
                 password = String.valueOf(symbols);
             } else {
                 password = scanner.nextLine();
             }
-            System.out.println();
+            break;
+            //System.out.println();
         }
         return password;
     }

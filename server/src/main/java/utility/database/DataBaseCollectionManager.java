@@ -1,7 +1,10 @@
 package utility.database;
 
 import data.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utility.CollectionManager;
+import utility.connection.Server;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -10,6 +13,7 @@ import java.util.Vector;
 public class DataBaseCollectionManager {
 
     private final Connection connection;
+    public static final Logger logger = LoggerFactory.getLogger(Server.class);
 
     public DataBaseCollectionManager(DataBaseConnection dataBaseConnection) {
         this.connection = dataBaseConnection.getConnection();
@@ -52,7 +56,7 @@ public class DataBaseCollectionManager {
             preparedStatement.setString(1, username);
             preparedStatement.execute();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.warn("Problems with database");
         }
     }
 
@@ -64,8 +68,7 @@ public class DataBaseCollectionManager {
     }
 
 
-    public Long insertDragon(Dragon dragon, String username) {
-        try {
+    public Long insertDragon(Dragon dragon, String username) throws SQLException {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO dragons values (nextval('id_sequence'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             setDragon(preparedStatement, dragon);
             preparedStatement.setString(11, username);
@@ -75,10 +78,6 @@ public class DataBaseCollectionManager {
             if (resultSet.next()) {
                 return resultSet.getLong("last_value");
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
         return null;
     }
 
@@ -149,12 +148,12 @@ public class DataBaseCollectionManager {
         delete.executeUpdate();
     }
 
-    public void restartSequence(CollectionManager collectionManager) {
+    public void restartSequence(Long lastId) {
         try {
             Statement restart = connection.createStatement();
-            restart.executeUpdate("ALTER SEQUENCE IF EXISTS id_sequence RESTART WITH " + collectionManager.getLastId() + 1);
+            restart.executeUpdate("ALTER SEQUENCE IF EXISTS id_sequence RESTART WITH " + lastId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.warn("Problems with database");
         }
     }
 

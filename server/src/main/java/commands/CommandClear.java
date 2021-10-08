@@ -25,7 +25,7 @@ public class CommandClear extends Command {
     public Response execute(String enteredCommand, Dragon dragon, String username) {
         dbCollectionManager.clear(username);
         collectionManager.clear(username);
-        dbCollectionManager.restartSequence(collectionManager);
+        dbCollectionManager.restartSequence(collectionManager.getLastId() + 1);
         return new Response(ResultCode.CHANGE, "Коллекция успешно очищена");
     }
 }

@@ -64,7 +64,7 @@ public class RequestHandler {
                     return new Response(ResultCode.OK);
                 } else return new Response(ResultCode.WRONG);
             } catch (SQLException ex) {
-                logger.warn("Problems with DB");
+                logger.warn("Problems with database");
                 ex.printStackTrace();
                 return new Response(ResultCode.DBERROR);
             } catch (NoSuchAlgorithmException ex) {
@@ -90,11 +90,13 @@ public class RequestHandler {
                     return commands.get(request.getCommandName().getName()).execute(request.getFullCommand(), request.getDragon(), request.getUsername());
                 }
             } catch (SQLException ex) {
-                logger.warn("Problems with DB");
-                return new Response(ResultCode.DBERROR);
+                logger.warn("Problems with database");
+                return new Response(ResultCode.DBERROR, "Невозможно выполнить данную команду, " +
+                        "так как произошла ошибка при работе с базой данных");
             } catch (NoSuchAlgorithmException ex) {
                 logger.warn("Hashing algorithm was not found");
-                return new Response(ResultCode.DBERROR);
+                return new Response(ResultCode.DBERROR, "Невозможно выполнить данную команду, " +
+                        "так как произошла ошибка при работе с базой данных");
             }
         }
         return new Response(ResultCode.NOTFOUND, "Невозможно выполнить данную команду, " +

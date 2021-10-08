@@ -17,7 +17,7 @@ public class DataBaseInitializer {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS users(" +
                     "username varchar(255)," +
                     "password BYTEA DEFAULT (null))");
-            statement.executeUpdate("CREATE SEQUENCE IF NOT EXISTS ids START 1");
+            statement.executeUpdate("CREATE SEQUENCE IF NOT EXISTS id_sequence START 1");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS dragons(" +
                     "id bigint PRIMARY KEY," +
                     "name varchar(255) NOT NULL," +
@@ -29,7 +29,7 @@ public class DataBaseInitializer {
                     "dragon_type varchar(255) NOT NULL," +
                     "dragon_character varchar(255) NOT NULL," +
                     "size int," +
-                    "eyes_count double precision NOT NULL," +
+                    "eyes_count double precision," +
                     "owner varchar(255))");
         } catch (SQLException ex) {
             ex.printStackTrace();
