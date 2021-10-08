@@ -48,38 +48,68 @@ public class Authorization {
 
     public boolean checkRegistration() throws NoSuchElementException {
         while (true) {
-            System.out.println("У вас уже есть учетная запись?(Y/N)");
+            System.out.println("У вас уже есть учетная запись?(YES/NO)");
             String answer = scanner.nextLine().trim();
             System.out.println();
-            if (answer.equalsIgnoreCase("Y")) return true;
-            else if (answer.equalsIgnoreCase("N")) return false;
+            if (answer.equalsIgnoreCase("YES")) return true;
+            else if (answer.equalsIgnoreCase("NO")) return false;
         }
     }
 
     public void authorize() throws NoSuchElementException {
+        String name;
+        Request request;
+        Response response;
+        ResultCode resultCode;
         while (true) {
-            String name = inputName();
-            String password = inputPassword();
-            Request request = new Request(null, null, null, name, password, true);
+            name = inputName();
+            request = new Request(null, null, null, name, null, true);
             try {
                 client.connect();
                 client.send(request);
-                Response response = client.receive();
-                ResultCode resultCode = response.getResultCode();
-                if (resultCode == ResultCode.WRONG) {
-                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Неверное имя пользователя или пароль. Пожалуйста, повторите ввод" +
+                response = client.receive();
+                resultCode = response.getResultCode();
+                if (resultCode == ResultCode.NOTFOUND) {
+                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Пользователь с таким именем не найден. Пожалуйста, повторите ввод" +
                             ConsoleColor.ANSI_RESET.getColor());
                     System.out.println();
-                } else if (resultCode == ResultCode.OK) {
-                    System.out.println("Пользователь успешно авторизован");
-                    session = new Session(name, password);
-                    break;
-                } else System.out.println(ConsoleColor.ANSI_RED.getColor() + "Ошибка при работе с базой данных" + ConsoleColor.ANSI_RESET.getColor());
+                } else if (resultCode == ResultCode.OK) break;
+                else {
+                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Ошибка при работе с базой данных" + ConsoleColor.ANSI_RESET.getColor());
+                    System.out.println();
+                }
             } catch (IOException | ClassNotFoundException | ServerUnavailableException e) {
                 System.out.println((ConsoleColor.ANSI_RED.getColor() + "Ошибка подкдючения к северу" + ConsoleColor.ANSI_RESET.getColor()));
                 System.out.println();
             }
         }
+        while (true) {
+            String password = inputPassword();
+            request = new Request(null, null, null, name, password, true);
+            try {
+                client.connect();
+                client.send(request);
+                response = client.receive();
+                resultCode = response.getResultCode();
+                if (resultCode == ResultCode.WRONG) {
+                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Неверный пароль. Пожалуйста, повторите ввод" +
+                            ConsoleColor.ANSI_RESET.getColor());
+                    System.out.println();
+                } else if (resultCode == ResultCode.OK) {
+                    System.out.println(ConsoleColor.ANSI_GREEN.getColor() + "Пользователь успешно авторизован" + ConsoleColor.ANSI_RESET.getColor());
+                    session = new Session(name, password);
+                    break;
+                } else {
+                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Ошибка при работе с базой данных" + ConsoleColor.ANSI_RESET.getColor());
+                    System.out.println();
+                }
+            } catch (IOException | ClassNotFoundException | ServerUnavailableException e) {
+                System.out.println((ConsoleColor.ANSI_RED.getColor() + "Ошибка подкдючения к северу" + ConsoleColor.ANSI_RESET.getColor()));
+                System.out.println();
+            }
+
+        }
+
     }
 
     public void register() throws NoSuchElementException {
@@ -92,7 +122,7 @@ public class Authorization {
                 Response response = client.receive();
                 ResultCode resultCode = response.getResultCode();
                 if (resultCode == ResultCode.EXIST) {
-                    System.out.println("Пользователь с таким именем уже существует. Пожалуйста, введите другое имя пользователя");
+                    System.out.println(ConsoleColor.ANSI_RED.getColor() + "Пользователь с таким именем уже существует. Пожалуйста, введите другое имя пользователя" + ConsoleColor.ANSI_RESET.getColor());
                     System.out.println();
                 } else if (resultCode == ResultCode.OK){
                     String password = inputPassword();
@@ -101,8 +131,8 @@ public class Authorization {
                     client.send(request);
                     response = client.receive();
                     if (response.getResultCode() == ResultCode.OK) {
+                        System.out.println(ConsoleColor.ANSI_GREEN.getColor() + "Пользователь успешно зарегистрирован. Пожалуйста, авторизуйтесь" + ConsoleColor.ANSI_RESET.getColor());
                         System.out.println();
-                        System.out.println("Пользователь успешно зарегистрирован. Пожалуйста, авторизуйтесь");
                         authorize();
                         break;
                     } else System.out.println(ConsoleColor.ANSI_RED.getColor() + "Ошибка при работе с базой данных" + ConsoleColor.ANSI_RESET.getColor());

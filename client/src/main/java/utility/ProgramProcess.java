@@ -20,7 +20,6 @@ public class ProgramProcess {
     private final Scanner scanner;
     private final Client client;
     private final Authorization authorization;
-    private Session session;
 
     public ProgramProcess(ElementCreation elementCreation, Scanner scanner, Client client, Authorization authorization) {
         this.elementCreation = elementCreation;
@@ -55,7 +54,7 @@ public class ProgramProcess {
             } else {
                 authorization.register();
             }
-            session = authorization.getSession();
+            Session session = authorization.getSession();
             System.out.println();
             System.out.println("Программа запущена в интерактивном режиме. Введите \"help\", чтобы посмотреть доступные команды");
             while (true) {

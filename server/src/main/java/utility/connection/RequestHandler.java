@@ -38,7 +38,7 @@ public class RequestHandler {
     }
 
     public Response process(Request request) {
-        if (request.getPassword() == null) {
+        if (request.getPassword() == null && !request.getIsRegister()) {
             try {
                 if (dataBaseUserManager.isUserExist(request.getUsername())) {
                     return new Response(ResultCode.EXIST);
@@ -46,7 +46,15 @@ public class RequestHandler {
                     return new Response(ResultCode.OK);
                 }
             } catch (SQLException ex) {
-                logger.warn("Problems with DB");
+                logger.warn("Problems with database");
+                return new Response(ResultCode.DBERROR);
+            }
+        } else if (request.getPassword() == null && request.getIsRegister()) {
+            try {
+                if (dataBaseUserManager.isUserExist(request.getUsername())) return new Response(ResultCode.OK);
+                else new Response(ResultCode.NOTFOUND);
+            } catch (SQLException ex) {
+                logger.warn("Problems with database");
                 return new Response(ResultCode.DBERROR);
             }
         } else if (request.getCommandName() == null && request.getIsRegister()) {
@@ -57,6 +65,7 @@ public class RequestHandler {
                 } else return new Response(ResultCode.WRONG);
             } catch (SQLException ex) {
                 logger.warn("Problems with DB");
+                ex.printStackTrace();
                 return new Response(ResultCode.DBERROR);
             } catch (NoSuchAlgorithmException ex) {
                 logger.warn("Hashing algorithm was not found");
